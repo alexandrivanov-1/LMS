@@ -1,0 +1,63 @@
+name: Integration (Compose)
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  compose-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Docker info
+        run: |
+          docker version
+          docker compose version
+
+      - name: Create .env
+        run: |
+          cat > .env << 'EOF'
+          POSTGRES_DB=kpk
+          POSTGRES_USER=kpk
+          POSTGRES_PASSWORD=changeme
+          MINIO_ACCESS_KEY=kpk_access
+          MINIO_SECRET_KEY=changeme
+          NEO4J_USER=neo4j
+          NEO4J_PASS=changeme
+          VECTOR_DIM=768
+          EOF
+
+      - name: Build & Up
+        working-directory: infra
+        run: docker compose up -d --build
+
+      - name: Wait for gateway
+        run: |
+          for i in $(seq 1 60); do
+            curl -fsS http://localhost/health && exit 0 || true
+            sleep 5
+          done
+          echo "gateway didn't respond"; docker compose -f infra/docker-compose.yml ps; exit 1
+
+      - name: Smoke: upload + parser + index + search
+        run: |
+          echo "hello from ci" > /tmp/test.txt
+          curl -fsS -F "files=@/tmp/test.txt" http://localhost/ingest/upload
+          curl -fsS -X POST http://localhost/parser/scan
+          curl -fsS -X POST http://localhost/indexer/run
+          curl -fsS -H 'Content-Type: application/json' \
+            -d '{"query":"закупка","top_k":3}' http://localhost/search
+
+      - name: Logs (artifact)
+        if: always()
+        run: |
+          docker compose -f infra/docker-compose.yml logs --no-color > compose.log || true
+        continue-on-error: true
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: compose-logs
+          path: compose.log

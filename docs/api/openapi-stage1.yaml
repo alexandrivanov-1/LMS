@@ -1,0 +1,175 @@
+openapi: 3.0.3
+info:
+  title: KPK Platform API (Stage 1)
+  version: 0.1.0
+servers:
+  - url: https://example.org/api
+paths:
+  /ingest/upload:
+    post:
+      summary: Upload files (PDF/DOCX/PPTX/XLSX)
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '202':
+          description: Accepted for processing
+  /ingest/url:
+    post:
+      summary: Submit URL for ingestion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url: { type: string }
+      responses:
+        '202': { description: Accepted }
+  /sources:
+    get:
+      summary: List sources
+      responses:
+        '200':
+          description: OK
+  /norms:
+    get:
+      summary: Search normative units
+      parameters:
+        - in: query
+          name: law
+          schema: { type: string }
+        - in: query
+          name: article
+          schema: { type: string }
+        - in: query
+          name: part
+          schema: { type: string }
+      responses:
+        '200': { description: OK }
+  /atoms:
+    get: { summary: List knowledge atoms, responses: { '200': { description: OK } } }
+    post:
+      summary: Create atom
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/KnowledgeAtom' }
+      responses:
+        '201': { description: Created }
+  /atoms/{id}:
+    get: { summary: Get atom, responses: { '200': { description: OK } } }
+    patch:
+      summary: Update atom
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/KnowledgeAtom' }
+      responses:
+        '200': { description: Updated }
+  /contexts:
+    post:
+      summary: Create context profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ContextProfile' }
+      responses:
+        '201': { description: Created }
+  /search:
+    post:
+      summary: Hybrid search with citations (RAG-strict)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query: { type: string }
+                as_of: { type: string, format: date }
+      responses:
+        '200': { description: OK }
+  /graph:
+    get:
+      summary: Neighborhood subgraph around a node
+      parameters:
+        - in: query
+          name: node_id
+          schema: { type: string }
+        - in: query
+          name: depth
+          schema: { type: integer, default: 2 }
+      responses:
+        '200': { description: OK }
+  /questions/import_xlsx:
+    post:
+      summary: Import MCQ from Excel (4 options, single correct)
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file: { type: string, format: binary }
+      responses:
+        '201': { description: Imported }
+  /cards/export/anki:
+    post:
+      summary: Export cards to Anki package or CSV
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                atoms: { type: array, items: { type: string } }
+                format: { type: string, enum: [csv, apkg] }
+      responses:
+        '200': { description: OK }
+components:
+  schemas:
+    KnowledgeAtom:
+      type: object
+      properties:
+        id: { type: string }
+        title: { type: string }
+        statement: { type: string }
+        type: { type: string }
+        bloom: { type: string }
+        granularity: { type: string }
+        status: { type: string }
+        citations:
+          type: array
+          items:
+            type: object
+            properties:
+              norm_id: { type: string }
+              locator: { type: object }
+    ContextProfile:
+      type: object
+      properties:
+        id: { type: string }
+        atom_id: { type: string }
+        role: { type: string }
+        delivery:
+          type: array
+          items: { type: string }
+        activities_default:
+          type: array
+          items: { type: string }

@@ -1,0 +1,4 @@
+/services/*   @team-backend
+/frontend/*   @team-frontend
+/infra/*      @team-infra
+/docs/*       @team-method
