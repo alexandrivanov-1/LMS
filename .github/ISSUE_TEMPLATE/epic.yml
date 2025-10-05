@@ -1,0 +1,23 @@
+name: Epic
+description: Крупный блок работ Stage 1
+labels: ["epic"]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Цель
+      description: Что хотим получить в итоге?
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Объем работ
+  - type: textarea
+    id: dod
+    attributes:
+      label: DoD (критерии готовности)
+  - type: textarea
+    id: risks
+    attributes:
+      label: Риски и проверки

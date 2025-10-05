@@ -1,0 +1,22 @@
+{
+  "name": "KPK Stage 1 Dev",
+  "image": "mcr.microsoft.com/devcontainers/base:jammy",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+  },
+  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y docker-compose-plugin && cd infra && docker compose pull || true",
+  "postStartCommand": "cd infra && docker compose up -d || true",
+  "forwardPorts": [80, 9001, 7474, 6333, 10200, 9998],
+  "portsAttributes": {
+    "80":   { "label": "gateway/nginx", "onAutoForward": "notify" },
+    "9001": { "label": "MinIO console", "onAutoForward": "silent" },
+    "7474": { "label": "Neo4j browser", "onAutoForward": "silent" },
+    "6333": { "label": "Qdrant", "onAutoForward": "silent" }
+  },
+  "remoteUser": "vscode",
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-azuretools.vscode-docker","eamodio.gitlens"]
+    }
+  }
+}

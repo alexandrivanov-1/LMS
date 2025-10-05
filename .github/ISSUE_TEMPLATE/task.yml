@@ -1,0 +1,22 @@
+name: Task
+description: Конкретная задача в рамках эпика
+labels: ["task"]
+body:
+  - type: textarea
+    id: desc
+    attributes:
+      label: Описание
+    validations:
+      required: true
+  - type: textarea
+    id: ac
+    attributes:
+      label: Acceptance Criteria
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Чек-лист
+      options:
+        - label: Тесты написаны/обновлены
+        - label: Линты проходят
+        - label: Документация обновлена
