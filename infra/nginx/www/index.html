@@ -7,9 +7,11 @@
   <style>
     body{font-family:system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin:2rem; line-height:1.5}
     .card{border:1px solid #ddd; border-radius:12px; padding:16px; margin-bottom:16px}
-    button{padding:8px 14px; border-radius:8px; border:1px solid #ccc; background:#f8f8f8; cursor:pointer}
+    button{padding:8px 14px; border-radius:8px; border:1px solid #ccc; background:#f8f8f8; cursor:pointer; transition:opacity .2s ease}
+    button[disabled]{cursor:not-allowed; opacity:0.6}
     input[type=file]{margin:8px 0}
-    pre{background:#f5f5f5; padding:12px; border-radius:8px; overflow:auto}
+    pre{background:#f5f5f5; padding:12px; border-radius:8px; overflow:auto; min-height:48px}
+    .alert{background:#fff4e5; color:#8a5d00; border:1px solid #f0c36d; padding:12px; border-radius:8px; margin-bottom:16px}
   </style>
 </head>
 <body>
@@ -46,31 +48,99 @@
 <script>
 const $ = sel => document.querySelector(sel);
 
-$('#uploadForm').addEventListener('submit', async (e)=>{
+const uploadForm = $('#uploadForm');
+const uploadBtn = $('#uploadForm button[type="submit"]');
+const uploadOut = $('#uploadOut');
+const fileInput = $('#uploadForm input[type="file"]');
+const scanBtn = $('#scanBtn');
+const scanOut = $('#scanOut');
+const indexBtn = $('#indexBtn');
+const indexOut = $('#indexOut');
+const searchBtn = $('#searchBtn');
+const searchOut = $('#searchOut');
+const queryInput = $('#q');
+
+if (location.protocol === 'file:') {
+  const warn = document.createElement('div');
+  warn.className = 'alert';
+  warn.innerHTML = 'Эта страница должна открываться через запущенный стек (Nginx).<br/>Откройте <code>http://localhost/</code> или forwarded порт 80 в Codespaces.';
+  document.body.insertBefore(warn, document.body.firstChild);
+}
+
+const handleResponse = async (resp) => {
+  const text = await resp.text();
+  let payload;
+  try {
+    payload = text ? JSON.parse(text) : {};
+  } catch (err) {
+    payload = text || '';
+  }
+  if (!resp.ok) {
+    const message = typeof payload === 'string' ? payload : JSON.stringify(payload, null, 2);
+    throw new Error(message || `HTTP ${resp.status}`);
+  }
+  return payload;
+};
+
+const setBusy = (btn, busy) => {
+  if (!btn) return;
+  btn.disabled = busy;
+  btn.dataset.originalText = btn.dataset.originalText || btn.textContent;
+  btn.textContent = busy ? 'Выполняется…' : btn.dataset.originalText;
+};
+
+const show = (el, data) => {
+  if (!el) return;
+  el.textContent = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+};
+
+const request = async (endpoint, options, outputEl, btn) => {
+  try {
+    show(outputEl, 'Выполняется…');
+    setBusy(btn, true);
+    const resp = await fetch(endpoint, options);
+    const payload = await handleResponse(resp);
+    show(outputEl, payload);
+  } catch (err) {
+    let message = err?.message || String(err);
+    if (message.includes('Failed to fetch')) {
+      message = 'Не удалось подключиться. Убедитесь, что стек Docker запущен и страница открыта по адресу http://<host>/.';
+    }
+    show(outputEl, `Ошибка: ${message}`);
+  } finally {
+    setBusy(btn, false);
+  }
+};
+
+uploadForm.addEventListener('submit', async (e)=>{
   e.preventDefault();
-  const fd = new FormData($('#uploadForm'));
-  const r = await fetch('/ingest/upload', { method:'POST', body:fd });
-  $('#uploadOut').textContent = JSON.stringify(await r.json(), null, 2);
+  if (!fileInput.files || !fileInput.files.length) {
+    show(uploadOut, 'Выберите хотя бы один файл.');
+    return;
+  }
+  const fd = new FormData(uploadForm);
+  await request('/ingest/upload', { method:'POST', body: fd }, uploadOut, uploadBtn);
 });
 
-$('#scanBtn').addEventListener('click', async ()=>{
-  const r = await fetch('/parser/scan', { method:'POST' });
-  $('#scanOut').textContent = JSON.stringify(await r.json(), null, 2);
+scanBtn.addEventListener('click', async ()=>{
+  await request('/parser/scan', { method:'POST' }, scanOut, scanBtn);
 });
 
-$('#indexBtn').addEventListener('click', async ()=>{
-  const r = await fetch('/indexer/run', { method:'POST' });
-  $('#indexOut').textContent = JSON.stringify(await r.json(), null, 2);
+indexBtn.addEventListener('click', async ()=>{
+  await request('/indexer/run', { method:'POST' }, indexOut, indexBtn);
 });
 
-$('#searchBtn').addEventListener('click', async ()=>{
-  const q = $('#q').value || '';
-  const r = await fetch('/search', {
+searchBtn.addEventListener('click', async ()=>{
+  const q = (queryInput.value || '').trim();
+  if (!q) {
+    show(searchOut, 'Введите поисковый запрос.');
+    return;
+  }
+  await request('/search', {
     method:'POST',
     headers:{'Content-Type':'application/json'},
-    body: JSON.stringify({ query:q, top_k:5 })
-  });
-  $('#searchOut').textContent = JSON.stringify(await r.json(), null, 2);
+    body: JSON.stringify({ query: q, top_k: 5 })
+  }, searchOut, searchBtn);
 });
 </script>
 </body>
