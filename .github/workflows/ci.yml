@@ -1,0 +1,84 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    name: Python services (lint+tests)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [gateway, ingest, parser, indexer, mask, search]
+    defaults:
+      run:
+        working-directory: services/${{ matrix.service }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install deps
+        run: |
+          pip install -U pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          pip install ruff black pytest
+      - name: Lint (ruff)
+        run: ruff check .
+      - name: Format check (black)
+        run: black --check .
+      - name: Tests
+        run: pytest -q
+
+  node:
+    name: Frontend build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: if [ -f package.json ]; then npm ci; fi
+      - run: npm run lint --if-present
+      - run: npm run build --if-present
+
+  docker:
+    name: Build & Push Docker images
+    needs: [python, node]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build & Push services
+        run: |
+          REPO=ghcr.io/${{ github.repository }}
+          docker build -t $REPO/gateway:latest services/gateway
+          docker build -t $REPO/ingest:latest services/ingest
+          docker build -t $REPO/parser:latest services/parser
+          docker build -t $REPO/indexer:latest services/indexer
+          docker build -t $REPO/mask:latest services/mask
+          docker build -t $REPO/search:latest services/search
+          docker build -t $REPO/frontend:latest frontend
+          docker push $REPO/gateway:latest
+          docker push $REPO/ingest:latest
+          docker push $REPO/parser:latest
+          docker push $REPO/indexer:latest
+          docker push $REPO/mask:latest
+          docker push $REPO/search:latest
+          docker push $REPO/frontend:latest
