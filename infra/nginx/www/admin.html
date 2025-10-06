@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>LMS Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+      integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpcJ7VZodml6pCZPYv8Z1pU5Vvyw6X0ZJ0ANrP1xZ6NzZ1u1w6d87b5i2dg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      body {
+        font-family: "Inter", "Segoe UI", sans-serif;
+        margin: 0;
+        padding: 0 1.5rem 4rem;
+        background: #f5f6fa;
+        color: #1d1d1f;
+      }
+      header {
+        padding: 2rem 0 1rem;
+      }
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 0.25rem;
+      }
+      h2 {
+        font-size: 1.4rem;
+        margin-top: 2.5rem;
+      }
+      section {
+        background: #fff;
+        border-radius: 12px;
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      }
+      label {
+        display: block;
+        font-weight: 600;
+        margin: 0.75rem 0 0.25rem;
+      }
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        border-radius: 8px;
+        border: 1px solid #cbd5f5;
+        font-size: 0.95rem;
+      }
+      button {
+        background: #2563eb;
+        color: #fff;
+        border: none;
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: background 0.2s ease;
+        margin-top: 0.75rem;
+      }
+      button:hover {
+        background: #1d4ed8;
+      }
+      .status {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        color: #4b5563;
+        white-space: pre-wrap;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 1.5rem;
+      }
+      textarea {
+        min-height: 80px;
+      }
+      #graph {
+        height: 420px;
+        border: 1px solid #d1d5db;
+        border-radius: 12px;
+        margin-top: 1rem;
+        background: #fff;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+        font-size: 0.9rem;
+      }
+      th,
+      td {
+        padding: 0.6rem;
+        border-bottom: 1px solid #e5e7eb;
+        text-align: left;
+      }
+      th {
+        background: #f1f5f9;
+        font-weight: 600;
+      }
+      .pill {
+        display: inline-block;
+        background: #e0f2fe;
+        color: #0369a1;
+        padding: 0.15rem 0.45rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        margin-right: 0.25rem;
+      }
+      .flex {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+      .flex > div {
+        flex: 1 1 260px;
+      }
+    </style>
+    <script src="https://unpkg.com/cytoscape@3.27.0/dist/cytoscape.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>Админ-панель LMS Stage 1</h1>
+      <p>Минимальный набор инструментов для загрузки источников, работы с маской знаний и визуализации графа.</p>
+    </header>
+
+    <section id="upload">
+      <h2>Загрузка источников</h2>
+      <form id="upload-form">
+        <label for="source-file">Файл (PDF/DOCX и др.)</label>
+        <input type="file" id="source-file" name="files" required />
+        <button type="submit">Загрузить</button>
+      </form>
+      <div class="status" id="upload-status"></div>
+      <div class="status" id="sources-list"></div>
+    </section>
+
+    <section id="knowledge">
+      <h2>Маска знаний</h2>
+      <div class="grid">
+        <div>
+          <h3>Создание атома</h3>
+          <form id="atom-form">
+            <label for="atom-id">ID атома</label>
+            <input type="text" id="atom-id" required />
+
+            <label for="atom-title">Заголовок</label>
+            <input type="text" id="atom-title" required />
+
+            <label for="atom-statement">Утверждение</label>
+            <textarea id="atom-statement" required></textarea>
+
+            <label for="atom-type">Тип</label>
+            <input type="text" id="atom-type" placeholder="declarative/procedural/..." required />
+
+            <label for="atom-bloom">Уровень Bloom</label>
+            <input type="text" id="atom-bloom" placeholder="remember/..." required />
+
+            <label for="atom-granularity">Гранулярность</label>
+            <input type="text" id="atom-granularity" placeholder="micro/meso/macro" required />
+
+            <label for="atom-prereq">Prerequisites (через запятую)</label>
+            <input type="text" id="atom-prereq" />
+
+            <label for="atom-misc">Misconceptions (через запятую)</label>
+            <input type="text" id="atom-misc" />
+
+            <button type="submit">Создать атом</button>
+          </form>
+          <div class="status" id="atom-status"></div>
+        </div>
+
+        <div>
+          <h3>Создание контекста</h3>
+          <form id="context-form">
+            <label for="context-id">ID профиля</label>
+            <input type="text" id="context-id" required />
+
+            <label for="context-title">Название</label>
+            <input type="text" id="context-title" required />
+
+            <label for="context-desc">Описание</label>
+            <textarea id="context-desc"></textarea>
+
+            <label for="context-type">Тип</label>
+            <input type="text" id="context-type" required />
+
+            <label for="context-bloom">Уровень Bloom</label>
+            <input type="text" id="context-bloom" required />
+
+            <label for="context-granularity">Гранулярность</label>
+            <input type="text" id="context-granularity" required />
+
+            <label for="context-atoms">Atoms (ID через запятую)</label>
+            <input type="text" id="context-atoms" />
+
+            <button type="submit">Создать контекст</button>
+          </form>
+          <div class="status" id="context-status"></div>
+        </div>
+      </div>
+
+      <h3>Текущие атомы</h3>
+      <table id="atoms-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Заголовок</th>
+            <th>Тип</th>
+            <th>Bloom</th>
+            <th>Гранулярность</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <h3>Текущие контексты</h3>
+      <table id="contexts-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Название</th>
+            <th>Тип</th>
+            <th>Atoms</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section id="graph-section">
+      <h2>Просмотр графа (Neo4j)</h2>
+      <div class="flex">
+        <div>
+          <label for="graph-node">ID узла</label>
+          <input type="text" id="graph-node" placeholder="UUID или ключ" />
+        </div>
+        <div>
+          <label for="graph-depth">Глубина</label>
+          <input type="number" id="graph-depth" min="1" max="5" value="2" />
+        </div>
+      </div>
+      <button id="graph-load">Построить граф</button>
+      <div class="status" id="graph-status"></div>
+      <div id="graph"></div>
+    </section>
+
+    <script>
+      const uploadForm = document.getElementById('upload-form');
+      const uploadStatus = document.getElementById('upload-status');
+      const sourcesList = document.getElementById('sources-list');
+      const atomForm = document.getElementById('atom-form');
+      const atomStatus = document.getElementById('atom-status');
+      const contextForm = document.getElementById('context-form');
+      const contextStatus = document.getElementById('context-status');
+      const atomsTable = document.querySelector('#atoms-table tbody');
+      const contextsTable = document.querySelector('#contexts-table tbody');
+      const graphBtn = document.getElementById('graph-load');
+      const graphStatus = document.getElementById('graph-status');
+      const graphContainer = document.getElementById('graph');
+
+      async function refreshSources() {
+        try {
+          const resp = await fetch('/sources');
+          if (!resp.ok) throw new Error('Ошибка загрузки списка источников');
+          const data = await resp.json();
+          if (!data.items?.length) {
+            sourcesList.textContent = 'Источники не найдены.';
+          } else {
+            sourcesList.textContent = 'Последние источники: ' +
+              data.items.map((item) => `${item.title || item.id} (${item.kind})`).join(', ');
+          }
+        } catch (err) {
+          sourcesList.textContent = err.message;
+        }
+      }
+
+      uploadForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const fileInput = document.getElementById('source-file');
+        if (!fileInput.files.length) {
+          uploadStatus.textContent = 'Выберите файл.';
+          return;
+        }
+        const formData = new FormData();
+        formData.append('files', fileInput.files[0]);
+        uploadStatus.textContent = 'Загрузка...';
+        try {
+          const resp = await fetch('/ingest/upload', {
+            method: 'POST',
+            body: formData,
+          });
+          const data = await resp.json();
+          uploadStatus.textContent = resp.ok ? 'Загружено: ' + JSON.stringify(data) : 'Ошибка: ' + (data.detail || resp.statusText);
+          fileInput.value = '';
+          refreshSources();
+        } catch (err) {
+          uploadStatus.textContent = 'Ошибка: ' + err.message;
+        }
+      });
+
+      function csvToList(value) {
+        return value
+          .split(',')
+          .map((item) => item.trim())
+          .filter((item) => item.length > 0);
+      }
+
+      atomForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        atomStatus.textContent = 'Отправка...';
+        const payload = {
+          id: document.getElementById('atom-id').value.trim(),
+          title: document.getElementById('atom-title').value.trim(),
+          statement: document.getElementById('atom-statement').value.trim(),
+          type: document.getElementById('atom-type').value.trim(),
+          bloom: document.getElementById('atom-bloom').value.trim(),
+          granularity: document.getElementById('atom-granularity').value.trim(),
+          prerequisites: csvToList(document.getElementById('atom-prereq').value),
+          misconceptions: csvToList(document.getElementById('atom-misc').value),
+          citations: [],
+        };
+        try {
+          const resp = await fetch('/atoms', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          const data = await resp.json();
+          if (!resp.ok) throw new Error(data.detail || resp.statusText);
+          atomStatus.textContent = 'Создано: ' + data.id;
+          atomForm.reset();
+          loadAtoms();
+        } catch (err) {
+          atomStatus.textContent = 'Ошибка: ' + err.message;
+        }
+      });
+
+      contextForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        contextStatus.textContent = 'Отправка...';
+        const payload = {
+          id: document.getElementById('context-id').value.trim(),
+          title: document.getElementById('context-title').value.trim(),
+          description: document.getElementById('context-desc').value.trim(),
+          type: document.getElementById('context-type').value.trim(),
+          bloom: document.getElementById('context-bloom').value.trim(),
+          granularity: document.getElementById('context-granularity').value.trim(),
+          atom_ids: csvToList(document.getElementById('context-atoms').value),
+          prerequisites: [],
+          misconceptions: [],
+          citations: [],
+        };
+        try {
+          const resp = await fetch('/contexts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          });
+          const data = await resp.json();
+          if (!resp.ok) throw new Error(data.detail || resp.statusText);
+          contextStatus.textContent = 'Создано: ' + data.id;
+          contextForm.reset();
+          loadContexts();
+        } catch (err) {
+          contextStatus.textContent = 'Ошибка: ' + err.message;
+        }
+      });
+
+      async function loadAtoms() {
+        atomsTable.innerHTML = '<tr><td colspan="5">Загрузка...</td></tr>';
+        try {
+          const resp = await fetch('/atoms');
+          const data = await resp.json();
+          if (!resp.ok) throw new Error(data.detail || resp.statusText);
+          atomsTable.innerHTML = '';
+          data.items.forEach((atom) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td>${atom.id}</td><td>${atom.title}</td><td>${atom.type}</td><td>${atom.bloom}</td><td>${atom.granularity}</td>`;
+            atomsTable.appendChild(row);
+          });
+          if (!data.items.length) {
+            atomsTable.innerHTML = '<tr><td colspan="5">Нет данных</td></tr>';
+          }
+        } catch (err) {
+          atomsTable.innerHTML = `<tr><td colspan="5">Ошибка: ${err.message}</td></tr>`;
+        }
+      }
+
+      async function loadContexts() {
+        contextsTable.innerHTML = '<tr><td colspan="4">Загрузка...</td></tr>';
+        try {
+          const resp = await fetch('/contexts');
+          const data = await resp.json();
+          if (!resp.ok) throw new Error(data.detail || resp.statusText);
+          contextsTable.innerHTML = '';
+          data.items.forEach((ctx) => {
+            const row = document.createElement('tr');
+            const atoms = (ctx.atom_ids || []).map((id) => `<span class="pill">${id}</span>`).join('');
+            row.innerHTML = `<td>${ctx.id}</td><td>${ctx.title}</td><td>${ctx.type}</td><td>${atoms}</td>`;
+            contextsTable.appendChild(row);
+          });
+          if (!data.items.length) {
+            contextsTable.innerHTML = '<tr><td colspan="4">Нет данных</td></tr>';
+          }
+        } catch (err) {
+          contextsTable.innerHTML = `<tr><td colspan="4">Ошибка: ${err.message}</td></tr>`;
+        }
+      }
+
+      graphBtn.addEventListener('click', async () => {
+        const nodeId = document.getElementById('graph-node').value.trim();
+        const depth = Number(document.getElementById('graph-depth').value) || 1;
+        if (!nodeId) {
+          graphStatus.textContent = 'Укажите ID узла.';
+          return;
+        }
+        graphStatus.textContent = 'Пересборка графа...';
+        try {
+          const response = await fetch(`/graph?node_id=${encodeURIComponent(nodeId)}&depth=${depth}`);
+          const data = await response.json();
+          if (!response.ok) throw new Error(data.detail || response.statusText);
+          graphStatus.textContent = `Найдено узлов: ${data.nodes.length}, рёбер: ${data.edges.length}`;
+          renderGraph(data);
+        } catch (err) {
+          graphStatus.textContent = 'Ошибка: ' + err.message;
+        }
+      });
+
+      function renderGraph(data) {
+        const elements = [];
+        data.nodes.forEach((node) => {
+          elements.push({
+            data: {
+              id: node.id,
+              label: `${node.labels?.[0] || 'Node'}\n${node.properties?.title || node.id}`,
+            },
+          });
+        });
+        data.edges.forEach((edge, idx) => {
+          elements.push({
+            data: {
+              id: `e${idx}`,
+              source: edge.from.id,
+              target: edge.to.id,
+              label: edge.type,
+            },
+          });
+        });
+        cytoscape({
+          container: graphContainer,
+          elements,
+          style: [
+            {
+              selector: 'node',
+              style: {
+                'background-color': '#2563eb',
+                label: 'data(label)',
+                color: '#fff',
+                'text-wrap': 'wrap',
+                'text-max-width': 120,
+                'font-size': 10,
+                'text-valign': 'center',
+              },
+            },
+            {
+              selector: 'edge',
+              style: {
+                'line-color': '#94a3b8',
+                'target-arrow-color': '#94a3b8',
+                'target-arrow-shape': 'triangle',
+                width: 2,
+                label: 'data(label)',
+                'font-size': 9,
+                'curve-style': 'bezier',
+              },
+            },
+          ],
+          layout: {
+            name: 'cose',
+            animate: true,
+          },
+        });
+      }
+
+      refreshSources();
+      loadAtoms();
+      loadContexts();
+    </script>
+  </body>
+</html>

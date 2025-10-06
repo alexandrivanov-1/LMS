@@ -8,6 +8,10 @@ paths:
   /ingest/upload:
     post:
       summary: Upload files (PDF/DOCX/PPTX/XLSX)
+      description: |
+        Входящие документы разбиваются на чанки и отправляются на парсинг. Индексатор использует
+        детерминированную ONNX-модель (CPU, 768 измерений) поверх хешированных признаков, записывая
+        в Qdrant коллекцию ``chunks`` векторы с payload ``{source_id,norm_ref,page,slide,timecode,valid_from,valid_to}``.
       requestBody:
         required: true
         content:
@@ -23,101 +27,220 @@ paths:
       responses:
         '202':
           description: Accepted for processing
-  /ingest/url:
-    post:
-      summary: Submit URL for ingestion
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                url: { type: string }
-      responses:
-        '202': { description: Accepted }
   /sources:
     get:
-      summary: List sources
+      summary: Последние загруженные источники
       responses:
         '200':
           description: OK
-  /norms:
+  /atoms:
     get:
-      summary: Search normative units
+      summary: Список атомов знаний
       parameters:
         - in: query
-          name: law
-          schema: { type: string }
+          name: limit
+          schema: { type: integer, default: 100 }
         - in: query
-          name: article
-          schema: { type: string }
-        - in: query
-          name: part
-          schema: { type: string }
+          name: offset
+          schema: { type: integer, default: 0 }
       responses:
-        '200': { description: OK }
-  /atoms:
-    get: { summary: List knowledge atoms, responses: { '200': { description: OK } } }
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count: { type: integer }
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/KnowledgeAtom' }
     post:
-      summary: Create atom
+      summary: Создать атом знания
       requestBody:
         required: true
         content:
           application/json:
-            schema: { $ref: '#/components/schemas/KnowledgeAtom' }
+            schema: { $ref: '#/components/schemas/KnowledgeAtomCreate' }
       responses:
-        '201': { description: Created }
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/KnowledgeAtom' }
   /atoms/{id}:
-    get: { summary: Get atom, responses: { '200': { description: OK } } }
+    get:
+      summary: Получить атом
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/KnowledgeAtom' }
     patch:
-      summary: Update atom
+      summary: Обновить атом
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
       requestBody:
         required: true
         content:
           application/json:
-            schema: { $ref: '#/components/schemas/KnowledgeAtom' }
+            schema: { $ref: '#/components/schemas/KnowledgeAtomUpdate' }
       responses:
-        '200': { description: Updated }
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/KnowledgeAtom' }
+    delete:
+      summary: Удалить атом
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '204': { description: Deleted }
   /contexts:
+    get:
+      summary: Список профилей контекста
+      parameters:
+        - in: query
+          name: limit
+          schema: { type: integer, default: 100 }
+        - in: query
+          name: offset
+          schema: { type: integer, default: 0 }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count: { type: integer }
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/ContextProfile' }
     post:
-      summary: Create context profile
+      summary: Создать профиль контекста
       requestBody:
         required: true
         content:
           application/json:
-            schema: { $ref: '#/components/schemas/ContextProfile' }
+            schema: { $ref: '#/components/schemas/ContextProfileCreate' }
       responses:
-        '201': { description: Created }
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ContextProfile' }
+  /contexts/{id}:
+    get:
+      summary: Получить профиль контекста
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ContextProfile' }
+    patch:
+      summary: Обновить профиль контекста
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/ContextProfileUpdate' }
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ContextProfile' }
+    delete:
+      summary: Удалить профиль контекста
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: string }
+      responses:
+        '204': { description: Deleted }
   /search:
     post:
-      summary: Hybrid search with citations (RAG-strict)
+      summary: Поиск чанков с учётом даты и цитат
+      description: |
+        К запросу применяется та же схема эмбеддингов, что и при индексировании. Параметр ``as_of``
+        фильтрует результаты по ``valid_from`` / ``valid_to``. Каждый элемент выдачи содержит список цитат
+        с указанием норматива и координат чанка.
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
+              required: [query]
               properties:
-                query: { type: string }
-                as_of: { type: string, format: date }
+                query: { type: string, description: 'Поисковый запрос (до 4000 символов)' }
+                as_of: { type: string, format: date, description: 'Фильтр по дате, ISO 8601' }
+                top_k: { type: integer, default: 5 }
       responses:
-        '200': { description: OK }
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count: { type: integer }
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/SearchHit' }
   /graph:
     get:
-      summary: Neighborhood subgraph around a node
+      summary: Подграф Neo4j вокруг узла
+      description: |
+        Gateway инициирует пересборку графа (Postgres → Neo4j), затем возвращает подграф глубиной ``depth``
+        вокруг ``node_id``.
       parameters:
         - in: query
           name: node_id
+          required: true
           schema: { type: string }
         - in: query
           name: depth
-          schema: { type: integer, default: 2 }
+          schema: { type: integer, minimum: 1, maximum: 5, default: 2 }
       responses:
-        '200': { description: OK }
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/GraphResponse' }
   /questions/import_xlsx:
     post:
-      summary: Import MCQ from Excel (4 options, single correct)
+      summary: Импорт MCQ из XLSX (4 варианта, 1 верный)
+      description: |
+        Ожидается таблица с колонками ``prompt``, ``option1``..``option4``, ``correct`` (номер варианта или текст),
+        ``norm_unit_id`` и опционально ``chunk_id``, ``valid_from``, ``valid_to``.
       requestBody:
         required: true
         content:
@@ -125,51 +248,229 @@ paths:
             schema:
               type: object
               properties:
-                file: { type: string, format: binary }
+                file:
+                  type: string
+                  format: binary
       responses:
-        '201': { description: Imported }
+        '200':
+          description: Import result
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MCQImportResult' }
   /cards/export/anki:
-    post:
-      summary: Export cards to Anki package or CSV
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                atoms: { type: array, items: { type: string } }
-                format: { type: string, enum: [csv, apkg] }
+    get:
+      summary: Экспорт карточек для Anki (TSV)
       responses:
-        '200': { description: OK }
+        '200':
+          description: Tab-separated deck
+          content:
+            text/tab-separated-values:
+              schema:
+                type: string
+                format: binary
 components:
   schemas:
-    KnowledgeAtom:
+    Citation:
       type: object
       properties:
-        id: { type: string }
+        norm_unit_id:
+          type: string
+          nullable: true
+        chunk_id:
+          type: string
+          nullable: true
+    KnowledgeAtomBase:
+      type: object
+      required: [title, statement, type, bloom, granularity]
+      properties:
+        title: { type: string }
+        statement: { type: string }
+        type:
+          type: string
+          enum: [declarative, procedural, conceptual, conditional, metacognitive, normative]
+        bloom:
+          type: string
+          enum: [remember, understand, apply, analyze, evaluate, create]
+        granularity:
+          type: string
+          enum: [micro, meso, macro]
+        status:
+          type: string
+          enum: [draft, reviewed, approved, deprecated]
+          default: draft
+        version: { type: string, nullable: true }
+        prerequisites:
+          type: array
+          items: { type: string }
+        misconceptions:
+          type: array
+          items: { type: string }
+        citations:
+          type: array
+          items: { $ref: '#/components/schemas/Citation' }
+    KnowledgeAtomCreate:
+      allOf:
+        - type: object
+          required: [id]
+          properties:
+            id: { type: string }
+        - $ref: '#/components/schemas/KnowledgeAtomBase'
+    KnowledgeAtomUpdate:
+      type: object
+      properties:
         title: { type: string }
         statement: { type: string }
         type: { type: string }
         bloom: { type: string }
         granularity: { type: string }
         status: { type: string }
+        version: { type: string }
+        prerequisites:
+          type: array
+          items: { type: string }
+        misconceptions:
+          type: array
+          items: { type: string }
         citations:
           type: array
-          items:
-            type: object
-            properties:
-              norm_id: { type: string }
-              locator: { type: object }
+          items: { $ref: '#/components/schemas/Citation' }
+    KnowledgeAtom:
+      allOf:
+        - type: object
+          properties:
+            id: { type: string }
+            created_at: { type: string, format: date-time, nullable: true }
+            updated_at: { type: string, format: date-time, nullable: true }
+        - $ref: '#/components/schemas/KnowledgeAtomBase'
+    ContextProfileBase:
+      type: object
+      required: [title, type, bloom, granularity]
+      properties:
+        title: { type: string }
+        description: { type: string, nullable: true }
+        type: { type: string }
+        bloom: { type: string }
+        granularity: { type: string }
+        status:
+          type: string
+          enum: [draft, reviewed, approved, deprecated]
+          default: draft
+        version: { type: string, nullable: true }
+        prerequisites:
+          type: array
+          items: { type: string }
+        misconceptions:
+          type: array
+          items: { type: string }
+        citations:
+          type: array
+          items: { $ref: '#/components/schemas/Citation' }
+        atom_ids:
+          type: array
+          items: { type: string }
+    ContextProfileCreate:
+      allOf:
+        - type: object
+          required: [id]
+          properties:
+            id: { type: string }
+        - $ref: '#/components/schemas/ContextProfileBase'
+    ContextProfileUpdate:
+      type: object
+      properties:
+        title: { type: string }
+        description: { type: string }
+        type: { type: string }
+        bloom: { type: string }
+        granularity: { type: string }
+        status: { type: string }
+        version: { type: string }
+        prerequisites:
+          type: array
+          items: { type: string }
+        misconceptions:
+          type: array
+          items: { type: string }
+        citations:
+          type: array
+          items: { $ref: '#/components/schemas/Citation' }
+        atom_ids:
+          type: array
+          items: { type: string }
     ContextProfile:
+      allOf:
+        - type: object
+          properties:
+            id: { type: string }
+            created_at: { type: string, format: date-time, nullable: true }
+            updated_at: { type: string, format: date-time, nullable: true }
+        - $ref: '#/components/schemas/ContextProfileBase'
+    SearchCitation:
+      type: object
+      properties:
+        norm_unit_id: { type: string, nullable: true }
+        norm_ref: { type: string, nullable: true }
+        chunk:
+          type: object
+          properties:
+            chunk_id: { type: string }
+            page: { type: integer, nullable: true }
+            slide: { type: integer, nullable: true }
+            timecode: { type: string, nullable: true }
+    SearchHit:
+      type: object
+      properties:
+        score: { type: number }
+        chunk_id: { type: string }
+        source_id: { type: string, nullable: true }
+        norm_ref: { type: string, nullable: true }
+        valid_from: { type: string, nullable: true }
+        valid_to: { type: string, nullable: true }
+        citations:
+          type: array
+          items: { $ref: '#/components/schemas/SearchCitation' }
+    GraphNode:
       type: object
       properties:
         id: { type: string }
-        atom_id: { type: string }
-        role: { type: string }
-        delivery:
+        labels:
           type: array
           items: { type: string }
-        activities_default:
+        properties:
+          type: object
+    GraphEdge:
+      type: object
+      properties:
+        type: { type: string }
+        from:
+          type: object
+          properties:
+            id: { type: string }
+            labels:
+              type: array
+              items: { type: string }
+        to:
+          type: object
+          properties:
+            id: { type: string }
+            labels:
+              type: array
+              items: { type: string }
+        properties:
+          type: object
+    GraphResponse:
+      type: object
+      properties:
+        nodes:
           type: array
-          items: { type: string }
+          items: { $ref: '#/components/schemas/GraphNode' }
+        edges:
+          type: array
+          items: { $ref: '#/components/schemas/GraphEdge' }
+    MCQImportResult:
+      type: object
+      properties:
+        imported: { type: integer }
+        rejected_rows:
+          type: array
+          items: { type: integer }
