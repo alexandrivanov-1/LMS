@@ -18,31 +18,20 @@ if ! git ls-remote --exit-code --heads origin main >/dev/null 2>&1; then
 fi
 ```
 
-## 3. Обновите ветку Stage 1 относительно main
+## 3. Опубликуйте фиче-ветку с кодом Stage 1
 ```bash
-git fetch origin
-git checkout feat/stage1-bootstrap
-git rebase origin/main
-# при необходимости объедините коммиты Stage 1 в один: git rebase -i origin/main
-git push -f origin feat/stage1-bootstrap
+git checkout -B feat/stage1-bootstrap
+git add -A
+git commit -m "feat(bootstrap): Stage 1 scaffold (infra, services, docs, CI)"
+git push -u origin feat/stage1-bootstrap
 ```
 
-## 4. Откройте Pull Request и выполните squash-merge в main
-1. Создайте PR `feat/stage1-bootstrap` → `main` с заголовком `feat(bootstrap): Stage 1 scaffold`.
-2. Дождитесь прохождения workflows `CI` и `Integration` в GitHub Actions.
-3. Выполните **Squash & Merge** в веб-интерфейсе GitHub.
-4. Удалите ветку `feat/stage1-bootstrap` в веб-интерфейсе или командой:
-   ```bash
-   git push origin --delete feat/stage1-bootstrap
-   ```
-
-## 5. Зафиксируйте релиз в main
-```bash
-git checkout main
-git pull --ff-only origin main
-git tag v0.1.0-stage1-bootstrap
-git push origin v0.1.0-stage1-bootstrap
+## 4. Откройте Pull Request
+Создайте PR из ветки `feat/stage1-bootstrap` в `main` со заголовком:
 ```
+feat(bootstrap): Stage 1 scaffold
+```
+В описании кратко опишите добавленные компоненты: Docker Compose стек, сервисы, CI/CD, демо-страница, Codespaces и интеграционный workflow.
 
 После завершения обязательно удалите токен из `git remote` и переменных окружения:
 ```bash

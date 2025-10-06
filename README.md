@@ -55,12 +55,6 @@ cat ../db/schema.sql | docker compose exec -T postgres \
 - [docs/HOWTO_DEV_ON_GITHUB.md](docs/HOWTO_DEV_ON_GITHUB.md) — руководство по GitHub-only разработке.
 - [docs/HOWTO_PUSH_TO_GITHUB.md](docs/HOWTO_PUSH_TO_GITHUB.md) — инструкция по публикации из окружения с доступом к GitHub.
 
-## Stage 1 в релизе
-- Финальная ветка: `main`.
-- Тег релиза: `v0.1.0-stage1-bootstrap`.
-- CI: `CI` и `Integration` проходят на каждом pull request.
-- Защита `main`: обязательный review, запрет прямых push, только squash-merge.
-
 ## CI/CD
 - `CI` — линтеры/тесты для Python-сервисов и фронтенда, сборка Docker-образов.
 - `Integration (Compose)` — поднимает весь стек, выполняет health-check и базовый сценарий (upload → parser → index → search).
