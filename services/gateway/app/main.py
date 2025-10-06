@@ -18,7 +18,6 @@ def health():
     return {"status":"ok","service":"gateway"}
 
 
-
 @app.post("/ingest/upload")
 async def proxy_ingest_upload(request: Request):
     form = await request.form()
