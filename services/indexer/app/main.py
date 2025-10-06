@@ -1,9 +1,13 @@
+import hashlib
+import os
+import struct
+
+import numpy as np
+import psycopg
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-import os, hashlib, struct, numpy as np
-import psycopg
 from qdrant_client import QdrantClient
-from qdrant_client.models import PointStruct, Distance, VectorParams
+from qdrant_client.models import Distance, PointStruct, VectorParams
 
 app = FastAPI(title="indexer")
 DSN = os.getenv("POSTGRES_DSN")
