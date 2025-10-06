@@ -36,11 +36,29 @@ jobs:
         run: black --check .
       - name: Tests
         run: |
-          if [ -d tests ] || ls test_*.py >/dev/null 2>&1 || ls */test_*.py >/dev/null 2>&1; then
-            pytest -q
-          else
-            echo "No tests detected; skipping pytest"
-          fi
+          python - <<'PY'
+          import subprocess
+          import sys
+          from pathlib import Path
+
+          root = Path('.')
+
+          def has_tests() -> bool:
+              tests_dir = root / 'tests'
+              if tests_dir.exists() and any(tests_dir.rglob('*.py')):
+                  return True
+              if any(root.glob('test_*.py')):
+                  return True
+              for child in root.iterdir():
+                  if child.is_dir() and any(child.glob('test_*.py')):
+                      return True
+              return False
+
+          if has_tests():
+              sys.exit(subprocess.call(['pytest', '-q']))
+          else:
+              print('No tests detected; skipping pytest')
+          PY
 
   node:
     name: Frontend build
