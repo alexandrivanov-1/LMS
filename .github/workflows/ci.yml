@@ -35,7 +35,12 @@ jobs:
       - name: Format check (black)
         run: black --check .
       - name: Tests
-        run: pytest -q
+        run: |
+          if [ -d tests ] || ls test_*.py >/dev/null 2>&1 || ls */test_*.py >/dev/null 2>&1; then
+            pytest -q
+          else
+            echo "No tests detected; skipping pytest"
+          fi
 
   node:
     name: Frontend build
