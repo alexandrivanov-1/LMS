@@ -12,9 +12,12 @@ INDEXER_URL = os.getenv("INDEXER_URL", "http://indexer:8000")
 SEARCH_URL = os.getenv("SEARCH_URL", "http://search:8000")
 DSN = os.getenv("POSTGRES_DSN")
 
+
 @app.get("/health")
 def health():
     return {"status":"ok","service":"gateway"}
+
+
 
 @app.post("/ingest/upload")
 async def proxy_ingest_upload(request: Request):
@@ -28,6 +31,7 @@ async def proxy_ingest_upload(request: Request):
     async with httpx.AsyncClient(timeout=60.0) as client:
         resp = await client.post(f"{INGEST_URL}/ingest/upload", files=files, data=fields)
     return JSONResponse(resp.json(), status_code=resp.status_code)
+
 
 @app.get("/sources")
 def list_sources():
@@ -49,17 +53,20 @@ def list_sources():
         })
     return {"items": items}
 
+
 @app.post("/parser/scan")
 async def proxy_parser_scan():
     async with httpx.AsyncClient(timeout=600.0) as client:
         resp = await client.post(f"{PARSER_URL}/parser/scan")
     return JSONResponse(resp.json(), status_code=resp.status_code)
 
+
 @app.post("/indexer/run")
 async def proxy_indexer_run():
     async with httpx.AsyncClient(timeout=600.0) as client:
         resp = await client.post(f"{INDEXER_URL}/indexer/run")
     return JSONResponse(resp.json(), status_code=resp.status_code)
+
 
 @app.post("/search")
 async def proxy_search(request: Request):

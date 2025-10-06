@@ -22,9 +22,11 @@ client = Minio(
 BUCKET = os.getenv("MINIO_BUCKET", "sources")
 DSN = os.getenv("POSTGRES_DSN")
 
+
 @app.get("/health")
 def health():
     return {"status":"ok","service":"ingest"}
+
 
 @app.post("/ingest/upload")
 async def upload(files: list[UploadFile] = File(...)):
