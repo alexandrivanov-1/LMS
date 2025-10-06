@@ -21,6 +21,7 @@ minio = Minio(
 )
 BUCKET = os.getenv("MINIO_BUCKET", "sources")
 
+
 @app.get("/health")
 def health():
     return {"status":"ok","service":"parser"}
@@ -31,6 +32,7 @@ def _split(text, size=1000, overlap=100):
         res.append(text[i:i+size])
         i += size - overlap
     return res
+
 
 @app.post("/parser/scan")
 async def scan(limit: int = 5):
