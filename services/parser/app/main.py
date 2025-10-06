@@ -1,7 +1,10 @@
+import json
+import os
+
+import httpx
+import psycopg
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-import os, json
-import psycopg, httpx
 from minio import Minio
 
 app = FastAPI(title="parser")

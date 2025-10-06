@@ -49,8 +49,8 @@ jobs:
         with:
           node-version: 20
       - run: if [ -f package.json ]; then npm ci; fi
-      - run: npm run lint --if-present
-      - run: npm run build --if-present
+      - run: if [ -f package.json ]; then npm run lint; fi
+      - run: if [ -f package.json ]; then npm run build; fi
 
   docker:
     name: Build & Push Docker images
