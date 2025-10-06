@@ -1,6 +1,9 @@
+import os
+
+import httpx
+import psycopg
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-import os, httpx, psycopg
 
 app = FastAPI(title="gateway")
 INGEST_URL = os.getenv("INGEST_URL", "http://ingest:8000")
