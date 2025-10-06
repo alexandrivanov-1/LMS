@@ -1,8 +1,13 @@
-from fastapi import FastAPI, UploadFile, File
-from fastapi.responses import JSONResponse
-import os, io, uuid, hashlib, json
-from minio import Minio
+import hashlib
+import io
+import json
+import os
+import uuid
+
 import psycopg
+from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import JSONResponse
+from minio import Minio
 
 app = FastAPI(title="ingest")
 
