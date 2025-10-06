@@ -15,7 +15,7 @@ DSN = os.getenv("POSTGRES_DSN")
 
 @app.get("/health")
 def health():
-    return {"status":"ok","service":"gateway"}
+    return {"status": "ok", "service": "gateway"}
 
 
 @app.post("/ingest/upload")
@@ -24,11 +24,15 @@ async def proxy_ingest_upload(request: Request):
     files, fields = [], []
     for key, value in form.multi_items():
         if hasattr(value, "filename"):
-            files.append(("files", (value.filename, await value.read(), value.content_type)))
+            files.append(
+                ("files", (value.filename, await value.read(), value.content_type))
+            )
         else:
             fields.append((key, str(value)))
     async with httpx.AsyncClient(timeout=60.0) as client:
-        resp = await client.post(f"{INGEST_URL}/ingest/upload", files=files, data=fields)
+        resp = await client.post(
+            f"{INGEST_URL}/ingest/upload", files=files, data=fields
+        )
     return JSONResponse(resp.json(), status_code=resp.status_code)
 
 
@@ -36,7 +40,7 @@ async def proxy_ingest_upload(request: Request):
 def list_sources():
     with psycopg.connect(DSN) as conn, conn.cursor() as cur:
         cur.execute(
-          """
+            """
           SELECT id, kind, title, created_at, meta
           FROM source
           ORDER BY created_at DESC
@@ -45,11 +49,16 @@ def list_sources():
         )
         rows = cur.fetchall()
     items = []
-    for (id_, kind, title, created_at, meta) in rows:
-        items.append({
-            "id": str(id_), "kind": kind, "title": title,
-            "created_at": created_at.isoformat(), "meta": meta
-        })
+    for id_, kind, title, created_at, meta in rows:
+        items.append(
+            {
+                "id": str(id_),
+                "kind": kind,
+                "title": title,
+                "created_at": created_at.isoformat(),
+                "meta": meta,
+            }
+        )
     return {"items": items}
 
 

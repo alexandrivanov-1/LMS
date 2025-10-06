@@ -14,14 +14,17 @@ VECTOR_DIM = int(os.getenv("VECTOR_DIM", "768"))
 COLL = "chunks"
 client = QdrantClient(url=QDRANT_URL)
 
+
 class SearchIn(BaseModel):
     query: str
     as_of: str | None = None
     top_k: int = 5
 
+
 @app.get("/health")
 def health():
-    return {"status":"ok","service":"search"}
+    return {"status": "ok", "service": "search"}
+
 
 def pseudo_embed(text: str, dim: int) -> np.ndarray:
     h = hashlib.sha256(text.encode("utf-8")).digest()
@@ -31,6 +34,7 @@ def pseudo_embed(text: str, dim: int) -> np.ndarray:
     v /= np.linalg.norm(v) + 1e-9
     return v
 
+
 @app.post("/search")
 def search(payload: SearchIn):
     vec = pseudo_embed(payload.query[:4000], VECTOR_DIM).tolist()
@@ -38,9 +42,11 @@ def search(payload: SearchIn):
     items = []
     for r in res:
         p = r.payload or {}
-        items.append({
-            "score": r.score,
-            "chunk_id": p.get("chunk_id"),
-            "source_id": p.get("source_id"),
-        })
+        items.append(
+            {
+                "score": r.score,
+                "chunk_id": p.get("chunk_id"),
+                "source_id": p.get("source_id"),
+            }
+        )
     return JSONResponse({"count": len(items), "items": items})

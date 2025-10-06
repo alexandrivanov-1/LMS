@@ -17,9 +17,11 @@ COLL = "chunks"
 
 client = QdrantClient(url=QDRANT_URL)
 
+
 @app.get("/health")
 def health():
-    return {"status":"ok","service":"indexer"}
+    return {"status": "ok", "service": "indexer"}
+
 
 def pseudo_embed(text: str, dim: int) -> np.ndarray:
     """Deterministic embedding without external models."""
@@ -30,6 +32,7 @@ def pseudo_embed(text: str, dim: int) -> np.ndarray:
     v /= np.linalg.norm(v) + 1e-9
     return v
 
+
 def ensure_collection():
     cols = [c.name for c in client.get_collections().collections]
     if COLL not in cols:
@@ -38,21 +41,22 @@ def ensure_collection():
             vectors_config=VectorParams(size=VECTOR_DIM, distance=Distance.COSINE),
         )
 
+
 @app.post("/indexer/run")
 def run(limit: int = 1000):
     ensure_collection()
     points = []
     with psycopg.connect(DSN) as conn, conn.cursor() as cur:
         cur.execute(
-          """
+            """
           SELECT id, source_id, text
           FROM chunk
           ORDER BY id DESC
           LIMIT %s
           """,
-          (limit,),
+            (limit,),
         )
-        for (cid, sid, txt) in cur.fetchall():
+        for cid, sid, txt in cur.fetchall():
             vec = pseudo_embed((txt or "")[:4000], VECTOR_DIM).tolist()
             payload = {
                 "chunk_id": str(cid),
