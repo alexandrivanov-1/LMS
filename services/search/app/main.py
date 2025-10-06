@@ -1,7 +1,11 @@
+import hashlib
+import os
+import struct
+
+import numpy as np
 from fastapi import FastAPI
-from pydantic import BaseModel
 from fastapi.responses import JSONResponse
-import os, hashlib, struct, numpy as np
+from pydantic import BaseModel
 from qdrant_client import QdrantClient
 
 app = FastAPI(title="search")
