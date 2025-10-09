@@ -203,7 +203,9 @@ def run(limit: int = 1000):
 
             vec = embed_text(txt).tolist()
 
-            valid_from = _first_not_none(chunk_valid_from, norm_valid_from, source_valid_from)
+            valid_from = _first_not_none(
+                chunk_valid_from, norm_valid_from, source_valid_from
+            )
             valid_to = _first_not_none(chunk_valid_to, norm_valid_to, source_valid_to)
 
             payload = {

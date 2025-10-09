@@ -39,7 +39,9 @@ def _load_session() -> Optional["ort.InferenceSession"]:
         return None
     if ort is None:
         raise RuntimeError("onnxruntime must be installed for ONNX embeddings")
-    model_path = os.path.join(os.path.dirname(__file__), "models", "hash_normalizer.onnx")
+    model_path = os.path.join(
+        os.path.dirname(__file__), "models", "hash_normalizer.onnx"
+    )
     if not os.path.exists(model_path):
         raise RuntimeError("hash_normalizer.onnx is missing in search service")
     return ort.InferenceSession(model_path, providers=["CPUExecutionProvider"])
@@ -105,7 +107,9 @@ def _parse_date(value: Optional[str]) -> Optional[date]:
     try:
         return date.fromisoformat(value)
     except ValueError as exc:
-        raise HTTPException(status_code=400, detail="Invalid as_of date format") from exc
+        raise HTTPException(
+            status_code=400, detail="Invalid as_of date format"
+        ) from exc
 
 
 def _db_conn():
@@ -158,7 +162,9 @@ def _fetch_chunk_metadata(chunk_ids: List[str]) -> Dict[str, Dict[str, Any]]:
     return {row["chunk_id"]: row for row in rows}
 
 
-def _within_interval(as_of: Optional[date], start: Optional[str], end: Optional[str]) -> bool:
+def _within_interval(
+    as_of: Optional[date], start: Optional[str], end: Optional[str]
+) -> bool:
     if as_of is None:
         return True
     valid_from = _parse_date(start)
@@ -216,7 +222,8 @@ def search(payload: SearchIn):
             {
                 "score": item.score,
                 "chunk_id": chunk_id,
-                "source_id": payload_data.get("source_id") or chunk_meta.get("source_id"),
+                "source_id": payload_data.get("source_id")
+                or chunk_meta.get("source_id"),
                 "norm_ref": norm_ref,
                 "valid_from": payload_data.get("valid_from"),
                 "valid_to": payload_data.get("valid_to"),
@@ -233,7 +240,9 @@ def graph_rebuild():
 
 
 @app.get("/graph")
-def graph(node_id: str = Query(..., description="ID узла"), depth: int = Query(1, ge=1, le=5)):
+def graph(
+    node_id: str = Query(..., description="ID узла"), depth: int = Query(1, ge=1, le=5)
+):
     data = get_subgraph(node_id, depth)
     if not data["nodes"]:
         raise HTTPException(status_code=404, detail="Node not found")
