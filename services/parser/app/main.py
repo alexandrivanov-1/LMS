@@ -6,6 +6,7 @@ import psycopg
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from minio import Minio
+from minio.error import S3Error
 
 app = FastAPI(title="parser")
 
@@ -35,6 +36,32 @@ def _split(text, size=1000, overlap=100):
     return res
 
 
+def _read_object(client, bucket: str, key: str) -> bytes:
+    """Возвращает содержимое объекта MinIO, гарантируя освобождение соединения."""
+
+    response = None
+    try:
+        response = client.get_object(bucket, key)
+        try:
+            return response.read()
+        except S3Error as exc:
+            raise RuntimeError(
+                f"Не удалось дочитать объект {bucket}/{key}: {exc.code}"
+            ) from exc
+        except Exception:
+            raise
+    except S3Error as exc:
+        raise RuntimeError(
+            f"Не удалось получить объект {bucket}/{key}: {exc.code}"
+        ) from exc
+    finally:
+        if response is not None:
+            try:
+                response.close()
+            finally:
+                response.release_conn()
+
+
 @app.post("/parser/scan")
 async def scan(limit: int = 5):
     processed = 0
@@ -54,7 +81,7 @@ async def scan(limit: int = 5):
             rows = cur.fetchall()
             for sid, meta in rows:
                 obj = meta["object"]
-                data = minio.get_object(BUCKET, obj).read()
+                data = _read_object(minio, BUCKET, obj)
                 async with httpx.AsyncClient(timeout=120.0) as client:
                     r = await client.put(
                         f"{TIKA_URL}/tika",
