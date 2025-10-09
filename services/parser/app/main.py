@@ -1,5 +1,7 @@
+import asyncio
 import json
 import os
+import time
 
 import httpx
 import psycopg
@@ -22,6 +24,35 @@ minio = Minio(
 BUCKET = os.getenv("MINIO_BUCKET", "sources")
 
 
+def _connect() -> psycopg.Connection:
+    last_error: psycopg.Error | None = None
+    for _ in range(5):
+        try:
+            return psycopg.connect(DSN)
+        except psycopg.OperationalError as exc:  # pragma: no cover - network
+            last_error = exc
+            time.sleep(2)
+    raise last_error or RuntimeError("Unable to connect to Postgres")
+
+
+async def _fetch_text(data: bytes) -> str:
+    last_error: Exception | None = None
+    for _ in range(5):
+        try:
+            async with httpx.AsyncClient(timeout=120.0) as client:
+                r = await client.put(
+                    f"{TIKA_URL}/tika",
+                    content=data,
+                    headers={"Accept": "text/plain"},
+                )
+                r.raise_for_status()
+                return r.text
+        except httpx.HTTPError as exc:  # pragma: no cover - network
+            last_error = exc
+            await asyncio.sleep(2)
+    raise last_error or RuntimeError("Unable to parse document")
+
+
 @app.get("/health")
 def health():
     return {"status": "ok", "service": "parser"}
@@ -38,7 +69,7 @@ def _split(text, size=1000, overlap=100):
 @app.post("/parser/scan")
 async def scan(limit: int = 5):
     processed = 0
-    with psycopg.connect(DSN) as conn:
+    with _connect() as conn:
         conn.autocommit = False
         with conn.cursor() as cur:
             cur.execute(
@@ -55,14 +86,7 @@ async def scan(limit: int = 5):
             for sid, meta in rows:
                 obj = meta["object"]
                 data = minio.get_object(BUCKET, obj).read()
-                async with httpx.AsyncClient(timeout=120.0) as client:
-                    r = await client.put(
-                        f"{TIKA_URL}/tika",
-                        content=data,
-                        headers={"Accept": "text/plain"},
-                    )
-                    r.raise_for_status()
-                    text = r.text
+                text = await _fetch_text(data)
                 parts = _split(text, 1000, 100)
                 for p in parts:
                     if not p.strip():

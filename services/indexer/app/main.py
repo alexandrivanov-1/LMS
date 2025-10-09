@@ -1,6 +1,7 @@
 import hashlib
 import os
 import struct
+import time
 
 import numpy as np
 import psycopg
@@ -34,12 +35,22 @@ def pseudo_embed(text: str, dim: int) -> np.ndarray:
 
 
 def ensure_collection():
-    cols = [c.name for c in client.get_collections().collections]
-    if COLL not in cols:
-        client.recreate_collection(
-            collection_name=COLL,
-            vectors_config=VectorParams(size=VECTOR_DIM, distance=Distance.COSINE),
-        )
+    last_error: Exception | None = None
+    for _ in range(5):
+        try:
+            cols = [c.name for c in client.get_collections().collections]
+            if COLL not in cols:
+                client.recreate_collection(
+                    collection_name=COLL,
+                    vectors_config=VectorParams(
+                        size=VECTOR_DIM, distance=Distance.COSINE
+                    ),
+                )
+            return
+        except Exception as exc:  # pragma: no cover - network
+            last_error = exc
+            time.sleep(2)
+    raise last_error or RuntimeError("Unable to ensure Qdrant collection")
 
 
 @app.post("/indexer/run")
@@ -66,5 +77,14 @@ def run(limit: int = 1000):
             }
             points.append(PointStruct(id=str(cid), vector=vec, payload=payload))
     if points:
-        client.upsert(collection_name=COLL, points=points)
+        last_error: Exception | None = None
+        for _ in range(5):
+            try:
+                client.upsert(collection_name=COLL, points=points)
+                break
+            except Exception as exc:  # pragma: no cover - network
+                last_error = exc
+                time.sleep(2)
+        else:
+            raise last_error or RuntimeError("Unable to upsert into Qdrant")
     return JSONResponse({"upserted": len(points)})
