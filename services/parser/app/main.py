@@ -1,3 +1,4 @@
+import contextlib
 import json
 import os
 
@@ -28,15 +29,17 @@ def health():
     return {"status": "ok", "service": "parser"}
 
 
-def _split(text, size=1000, overlap=100):
-    res, i, n = [], 0, len(text)
-    while i < n:
+def _split(text: str, size: int = 1000, overlap: int = 100) -> list[str]:
+    res: list[str] = []
+    step = max(size - overlap, 1)
+    i = 0
+    while i < len(text):
         res.append(text[i : i + size])
-        i += size - overlap
+        i += step
     return res
 
 
-def _read_object(client, bucket: str, key: str) -> bytes:
+def _read_object(client: Minio, bucket: str, key: str) -> bytes:
     """Возвращает содержимое объекта MinIO, гарантируя освобождение соединения."""
 
     response = None
@@ -56,9 +59,9 @@ def _read_object(client, bucket: str, key: str) -> bytes:
         ) from exc
     finally:
         if response is not None:
-            try:
+            with contextlib.suppress(AttributeError):
                 response.close()
-            finally:
+            with contextlib.suppress(AttributeError):
                 response.release_conn()
 
 
