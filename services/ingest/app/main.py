@@ -2,6 +2,7 @@ import hashlib
 import io
 import json
 import os
+import time
 import uuid
 
 import psycopg
@@ -23,6 +24,17 @@ BUCKET = os.getenv("MINIO_BUCKET", "sources")
 DSN = os.getenv("POSTGRES_DSN")
 
 
+def _connect() -> psycopg.Connection:
+    last_error: psycopg.Error | None = None
+    for _ in range(5):
+        try:
+            return psycopg.connect(DSN)
+        except psycopg.OperationalError as exc:  # pragma: no cover - network
+            last_error = exc
+            time.sleep(2)
+    raise last_error or RuntimeError("Unable to connect to Postgres")
+
+
 @app.get("/health")
 def health():
     return {"status": "ok", "service": "ingest"}
@@ -37,7 +49,7 @@ def ensure_bucket() -> None:
 async def upload(files: list[UploadFile] = File(...)):
     saved = []
     ensure_bucket()
-    with psycopg.connect(DSN) as conn:
+    with _connect() as conn:
         with conn.cursor() as cur:
             for f in files:
                 data = await f.read()
