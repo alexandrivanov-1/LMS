@@ -8,6 +8,7 @@ import psycopg
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from minio import Minio
+from minio.error import S3Error
 
 app = FastAPI(title="parser")
 
@@ -22,6 +23,18 @@ minio = Minio(
     secure=MINIO_ENDPOINT.startswith("https://"),
 )
 BUCKET = os.getenv("MINIO_BUCKET", "sources")
+
+
+def _read_object(object_name: str) -> bytes:
+    try:
+        response = minio.get_object(BUCKET, object_name)
+    except S3Error as exc:  # pragma: no cover - network
+        raise RuntimeError(f"unable to fetch object {object_name}: {exc}") from exc
+    try:
+        return response.read()
+    finally:
+        response.close()
+        response.release_conn()
 
 
 def _connect() -> psycopg.Connection:
@@ -85,7 +98,7 @@ async def scan(limit: int = 5):
             rows = cur.fetchall()
             for sid, meta in rows:
                 obj = meta["object"]
-                data = minio.get_object(BUCKET, obj).read()
+                data = _read_object(obj)
                 text = await _fetch_text(data)
                 parts = _split(text, 1000, 100)
                 for p in parts:
