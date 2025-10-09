@@ -28,9 +28,15 @@ def health():
     return {"status": "ok", "service": "ingest"}
 
 
+def ensure_bucket() -> None:
+    if not client.bucket_exists(BUCKET):
+        client.make_bucket(BUCKET)
+
+
 @app.post("/ingest/upload")
 async def upload(files: list[UploadFile] = File(...)):
     saved = []
+    ensure_bucket()
     with psycopg.connect(DSN) as conn:
         with conn.cursor() as cur:
             for f in files:
