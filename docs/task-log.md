@@ -20,3 +20,5 @@
 - Файлы: docs/merge-report.md, docs/task-log.md
 - Цель: зафиксировать мастер-промпт завершения Stage 1 для передачи агенту Codex.
 - Файлы: docs/master-prompt-stage1.md, docs/task-log.md
+- Цель: подтвердить успешный локальный прогон модульных тестов парсера и обновить отчёт Stage 1.
+- Файлы: docs/merge-report.md, docs/task-log.md
