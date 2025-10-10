@@ -18,3 +18,5 @@
 - Файлы: README.md, docs/task-log.md
 - Цель: актуализировать playbook Stage 1 и зафиксировать статус задач по синхронизации.
 - Файлы: docs/merge-report.md, docs/task-log.md
+- Цель: зафиксировать мастер-промпт завершения Stage 1 для передачи агенту Codex.
+- Файлы: docs/master-prompt-stage1.md, docs/task-log.md
