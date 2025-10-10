@@ -10,3 +10,5 @@
 - Файлы: .github/workflows/integration.yml, docs/task-log.md
 - Цель: подтвердить исправление integration workflow, синхронизировать документацию и подготовить отчёт по задаче пользователя.
 - Файлы: .github/workflows/integration.yml, docs/merge-report.md, docs/task-log.md
+- Цель: подготовить чеклист синхронизации репозитория с веткой `main` на GitHub и обновить отчёт.
+- Файлы: docs/github-sync-checklist.md, docs/merge-report.md, docs/task-log.md
