@@ -12,3 +12,5 @@
 - Файлы: .github/workflows/integration.yml, docs/merge-report.md, docs/task-log.md
 - Цель: подготовить чеклист синхронизации репозитория с веткой `main` на GitHub и обновить отчёт.
 - Файлы: docs/github-sync-checklist.md, docs/merge-report.md, docs/task-log.md
+- Цель: подготовить фиксацию замечаний пользователя и подтвердить наличие всех изменений перед публикацией в main.
+- Файлы: AGENTS.md, .github/workflows/integration.yml, docs/consultation-guidelines.md, docs/github-sync-checklist.md, docs/merge-report.md, docs/operation-algorithm.md, docs/task-log.md, services/parser/app/main.py, services/parser/tests/test_main.py
