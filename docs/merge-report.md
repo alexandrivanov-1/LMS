@@ -81,8 +81,8 @@
 
 | Этап | Статус | Последняя проверка | Действия для завершения |
 | --- | --- | --- | --- |
-| `chore/agents-policy` | Pending | Требуется прогон CI/Integration в GitHub Actions | Запустить workflows из PR, приложить ссылки на зелёные прогоны и выполнить squash-merge |
-| `feat/parser-read-object` | Pending | 2025-10-10: локально выполнен `pytest services/parser/tests -q` (успешно); Actions не запускались | Открыть PR в `main`, дождаться CI/Integration и смержить |
+| `chore/agents-policy` | Pending | 2025-10-10 18:49 UTC: обновлён smoke-шаг integration.yml, локально пройден `pytest services/parser/tests -q`; Actions не запускались | Запустить workflows из PR, приложить ссылки на зелёные прогоны и выполнить squash-merge |
+| `feat/parser-read-object` | Pending | 2025-10-10 18:49 UTC: повторно выполнен `pytest services/parser/tests -q` (успешно); Actions не запускались | Открыть PR в `main`, дождаться CI/Integration и смержить |
 | `feat/stage1-full` | Pending | Интеграция не запускалась в текущей сессии | Запустить полный сценарий Integration, устранить сбои и слить в `main` |
 | `feat/stage1-env-doc` | Pending | Ожидает синхронизации с актуальным `main` | После мерджа Stage 1 кода обновить документацию, проверить CI/Integration и слить |
 | `feat/indexer-onnx` | Pending | Не проверялась на уникальные изменения | Сравнить с `main`; при отсутствии diff удалить ветку, иначе пройти стандартный цикл PR |

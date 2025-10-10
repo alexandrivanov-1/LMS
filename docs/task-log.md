@@ -22,3 +22,5 @@
 - Файлы: docs/master-prompt-stage1.md, docs/task-log.md
 - Цель: подтвердить успешный локальный прогон модульных тестов парсера и обновить отчёт Stage 1.
 - Файлы: docs/merge-report.md, docs/task-log.md
+- Цель: выполнить мастер-промпт завершения Stage 1 и зафиксировать реальные проверки.
+- Файлы: .github/workflows/integration.yml, docs/merge-report.md, docs/task-log.md
