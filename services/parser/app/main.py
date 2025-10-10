@@ -1,3 +1,4 @@
+import contextlib
 import json
 import os
 
@@ -6,6 +7,7 @@ import psycopg
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from minio import Minio
+from minio.error import S3Error
 
 app = FastAPI(title="parser")
 
@@ -27,12 +29,40 @@ def health():
     return {"status": "ok", "service": "parser"}
 
 
-def _split(text, size=1000, overlap=100):
-    res, i, n = [], 0, len(text)
-    while i < n:
+def _split(text: str, size: int = 1000, overlap: int = 100) -> list[str]:
+    res: list[str] = []
+    step = max(size - overlap, 1)
+    i = 0
+    while i < len(text):
         res.append(text[i : i + size])
-        i += size - overlap
+        i += step
     return res
+
+
+def _read_object(client: Minio, bucket: str, key: str) -> bytes:
+    """Возвращает содержимое объекта MinIO, гарантируя освобождение соединения."""
+
+    response = None
+    try:
+        response = client.get_object(bucket, key)
+        try:
+            return response.read()
+        except S3Error as exc:
+            raise RuntimeError(
+                f"Не удалось дочитать объект {bucket}/{key}: {exc.code}"
+            ) from exc
+        except Exception:
+            raise
+    except S3Error as exc:
+        raise RuntimeError(
+            f"Не удалось получить объект {bucket}/{key}: {exc.code}"
+        ) from exc
+    finally:
+        if response is not None:
+            with contextlib.suppress(AttributeError):
+                response.close()
+            with contextlib.suppress(AttributeError):
+                response.release_conn()
 
 
 @app.post("/parser/scan")
@@ -54,7 +84,7 @@ async def scan(limit: int = 5):
             rows = cur.fetchall()
             for sid, meta in rows:
                 obj = meta["object"]
-                data = minio.get_object(BUCKET, obj).read()
+                data = _read_object(minio, BUCKET, obj)
                 async with httpx.AsyncClient(timeout=120.0) as client:
                     r = await client.put(
                         f"{TIKA_URL}/tika",

@@ -41,14 +41,13 @@ jobs:
           done
           echo "gateway didn't respond"; docker compose -f infra/docker-compose.yml ps; exit 1
 
-      - name: Smoke: upload + parser + index + search
+      - name: Smoke upload parser index search
         run: |
           echo "hello from ci" > /tmp/test.txt
           curl -fsS -F "files=@/tmp/test.txt" http://localhost/ingest/upload
           curl -fsS -X POST http://localhost/parser/scan
           curl -fsS -X POST http://localhost/indexer/run
-          curl -fsS -H 'Content-Type: application/json' \
-            -d '{"query":"закупка","top_k":3}' http://localhost/search
+          curl -fsS -H 'Content-Type: application/json' -d '{"query":"закупка","top_k":3}' http://localhost/search
 
       - name: Logs (artifact)
         if: always()
