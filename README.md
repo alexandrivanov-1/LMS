@@ -49,6 +49,11 @@ cat ../db/schema.sql | docker compose exec -T postgres \
 - **infra** — Docker Compose, Nginx, вспомогательные скрипты.
 
 ## Документация
+- [AGENTS.md](AGENTS.md) — правила работы агента (приоритет инструкций, ветки/PR, запреты).
+- [docs/consultation-guidelines.md](docs/consultation-guidelines.md) — как проводить консультации без изменения кода.
+- [docs/operation-algorithm.md](docs/operation-algorithm.md) — алгоритм действий агента для задач и GitHub-операций.
+- [docs/merge-report.md](docs/merge-report.md) — playbook слияния Stage 1 (ветки, Actions, smoke в Codespaces, релиз).
+- [docs/github-sync-checklist.md](docs/github-sync-checklist.md) — чеклист синхронизации `main` с полной версией проекта.
 - [docs/TZ_Stage1.md](docs/TZ_Stage1.md) — техническое задание.
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — обзор архитектуры.
 - [docs/api/openapi-stage1.yaml](docs/api/openapi-stage1.yaml) — API Stage 1.
