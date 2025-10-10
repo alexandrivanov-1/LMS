@@ -15,6 +15,7 @@
 - **Workflows:**
   - CI (`ci.yml`): <https://github.com/alexandrivanov-1/LMS/actions?query=workflow%3ACI+branch%3Achore%2Fagents-policy>
   - Integration (`integration.yml`): <https://github.com/alexandrivanov-1/LMS/actions?query=workflow%3AIntegration+branch%3Achore%2Fagents-policy>
+- **Локальные проверки:** `pytest services/parser/tests -q` — подтверждает, что модульные тесты парсера проходят после фиксов.
 - **Действия при падении Integration:**
   1. Перезапустить workflow через UI.
   2. Скачать артефакты логов, определить сервис/контейнер, на котором произошёл сбой.

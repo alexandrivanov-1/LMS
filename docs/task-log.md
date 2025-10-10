@@ -8,3 +8,5 @@
 - Файлы: весь репозиторий (коммит фиксации состояния), docs/task-log.md
 - Цель: исправить синтаксис CI integration и подготовить merge ветки `chore/agents-policy`.
 - Файлы: .github/workflows/integration.yml, docs/task-log.md
+- Цель: подтвердить исправление integration workflow, синхронизировать документацию и подготовить отчёт по задаче пользователя.
+- Файлы: .github/workflows/integration.yml, docs/merge-report.md, docs/task-log.md
