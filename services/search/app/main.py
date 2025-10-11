@@ -38,30 +38,32 @@ def pseudo_embed(text: str, dim: int) -> np.ndarray:
 
 @app.post("/search")
 def search(payload: SearchIn):
-    vec = pseudo_embed(payload.query[:4000], VECTOR_DIM).tolist()
-    last_error: Exception | None = None
-    for _ in range(10):
-        try:
-            res = client.search(
-                collection_name=COLL,
-                query_vector=vec,
-                limit=payload.top_k,
+    try:
+        vec = pseudo_embed(payload.query[:4000], VECTOR_DIM).tolist()
+        last_error: Exception | None = None
+        for _ in range(10):
+            try:
+                res = client.search(
+                    collection_name=COLL,
+                    query_vector=vec,
+                    limit=payload.top_k,
+                )
+                break
+            except Exception as exc:  # pragma: no cover - network
+                last_error = exc
+                time.sleep(2)
+        else:
+            raise last_error or RuntimeError("Search backend unavailable")
+        items = []
+        for r in res:
+            p = r.payload or {}
+            items.append(
+                {
+                    "score": r.score,
+                    "chunk_id": p.get("chunk_id"),
+                    "source_id": p.get("source_id"),
+                }
             )
-            break
-        except Exception as exc:  # pragma: no cover - network
-            last_error = exc
-            time.sleep(2)
-    else:
-        warning = str(last_error or "Search backend unavailable")
-        return JSONResponse({"count": 0, "items": [], "warning": warning})
-    items = []
-    for r in res:
-        p = r.payload or {}
-        items.append(
-            {
-                "score": r.score,
-                "chunk_id": p.get("chunk_id"),
-                "source_id": p.get("source_id"),
-            }
-        )
-    return JSONResponse({"count": len(items), "items": items})
+        return JSONResponse({"count": len(items), "items": items})
+    except Exception as exc:  # pragma: no cover - safety net
+        return JSONResponse({"count": 0, "items": [], "warning": str(exc)})
