@@ -24,3 +24,5 @@
 - Файлы: docs/merge-report.md, docs/task-log.md
 - Цель: выполнить мастер-промпт завершения Stage 1 и зафиксировать реальные проверки.
 - Файлы: .github/workflows/integration.yml, docs/merge-report.md, docs/task-log.md
+- Цель: уточнить статус Actions в отчёте и зафиксировать невыполненные шаги Stage 1.
+- Файлы: docs/merge-report.md, docs/task-log.md
