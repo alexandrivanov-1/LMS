@@ -44,7 +44,7 @@ jobs:
       - name: Warm up services
         run: sleep 60
 
-      - name: "Smoke upload parser index search"
+      - name: Smoke upload parser index search
         run: |
           echo "hello from ci" > /tmp/test.txt
           curl -fsS -F "files=@/tmp/test.txt" http://localhost/ingest/upload
