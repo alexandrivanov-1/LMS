@@ -87,7 +87,7 @@
 | `feat/stage1-env-doc` | Pending | Ожидает синхронизации с актуальным `main` | Не запускались в этой сессии | После мерджа Stage 1 кода обновить документацию, проверить CI/Integration и слить |
 | `feat/indexer-onnx` | Pending | Не проверялась на уникальные изменения | Не запускались в этой сессии | Сравнить с `main`; при отсутствии diff удалить ветку, иначе пройти стандартный цикл PR |
 | `main` post-merge | Pending | 2025-10-10: локальные модульные тесты парсера пройдены | Не запускались в этой сессии | После слияний запустить CI/Integration и smoke-тест в Codespaces |
-| `codex/show-project-lms-document-structure` | In Progress | 2025-10-11 10:05 UTC: образ Tika обновлён до `2.9.2.1-full`, добавлен `workflow_dispatch` для CI | CI/Integration: повторный запуск ожидается | Перезапустить `CI` (dispatch) и `Integration` для ветки, подтвердить зелёные статусы и смержить PR #4 |
+| `codex/show-project-lms-document-structure` | In Progress | 2025-10-11 10:10 UTC: `CI` упал на `ruff` (E402), `Integration` завершился успешно после обновления образа Tika | CI: FAIL (run 18427799145, ruff E402); Integration: см. run 18427799148 | Исправить импорт в `services/parser/tests/test_main.py`, перезапустить оба workflow и подготовить merge PR #4 |
 
 > **Напоминание.** После выполнения каждого шага обновляйте таблицу: фиксируйте дату проверки, ссылки на успешные Actions и краткий результат (OK/FAIL). Это упрощает аудит выполнения Stage 1.
 

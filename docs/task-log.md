@@ -27,4 +27,4 @@
 - Цель: уточнить статус Actions в отчёте и зафиксировать невыполненные шаги Stage 1.
 - Файлы: docs/merge-report.md, docs/task-log.md
 - Цель: запустить CI/Integration для ветки `codex/show-project-lms-document-structure` и устранить падение из-за образа Tika.
-- Файлы: infra/docker-compose.yml, .github/workflows/ci.yml, docs/merge-report.md, docs/task-log.md
+- Файлы: infra/docker-compose.yml, .github/workflows/ci.yml, docs/merge-report.md, docs/task-log.md, services/parser/tests/test_main.py
