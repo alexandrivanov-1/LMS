@@ -34,3 +34,5 @@
 - Файлы: services/gateway/requirements.txt, .github/workflows/integration.yml, docs/merge-report.md, docs/task-log.md
 - Завершено: CI/Integration на ветке `codex/show-project-lms-document-structure` зелёные (CI run 18428464791, Integration run 18428465259); подготовка к merge.
 - Файлы: docs/merge-report.md, docs/task-log.md, services/gateway/app/main.py, services/gateway/requirements.txt, services/ingest/app/main.py
+- Завершено: ветка `codex/show-project-lms-document-structure` синхронизирована с `main`, Actions после фикса сообщения прошли (CI run 18428579010, Integration run 18428579746).
+- Файлы: docs/merge-report.md, docs/task-log.md, services/parser/app/main.py
