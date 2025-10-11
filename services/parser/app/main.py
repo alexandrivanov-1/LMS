@@ -39,7 +39,7 @@ def _read_object(object_name: str) -> bytes:
 
 def _connect() -> psycopg.Connection:
     last_error: psycopg.Error | None = None
-    for _ in range(5):
+    for _ in range(20):
         try:
             return psycopg.connect(DSN)
         except psycopg.OperationalError as exc:  # pragma: no cover - network
@@ -50,7 +50,7 @@ def _connect() -> psycopg.Connection:
 
 async def _fetch_text(data: bytes) -> str:
     last_error: Exception | None = None
-    for _ in range(5):
+    for _ in range(20):
         try:
             async with httpx.AsyncClient(timeout=120.0) as client:
                 r = await client.put(
@@ -62,7 +62,7 @@ async def _fetch_text(data: bytes) -> str:
                 return r.text
         except httpx.HTTPError as exc:  # pragma: no cover - network
             last_error = exc
-            await asyncio.sleep(2)
+            await asyncio.sleep(5)
     raise last_error or RuntimeError("Unable to parse document")
 
 
