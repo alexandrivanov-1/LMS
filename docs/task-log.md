@@ -28,3 +28,7 @@
 - Файлы: docs/merge-report.md, docs/task-log.md
 - Цель: запустить CI/Integration для ветки `codex/show-project-lms-document-structure` и устранить падение из-за образа Tika.
 - Файлы: infra/docker-compose.yml, .github/workflows/ci.yml, .github/workflows/integration.yml, docs/merge-report.md, docs/task-log.md, services/parser/tests/test_main.py
+- Цель: устранить рестарты `infra-nginx-1` в Integration и зафиксировать успешный прогон ветки `codex/show-project-lms-document-structure`.
+- Файлы: infra/nginx/conf.d/default.conf, docs/merge-report.md, docs/task-log.md
+- Цель: устранить 500 при загрузке в Integration и подготовить merge ветки `codex/show-project-lms-document-structure`.
+- Файлы: services/gateway/requirements.txt, .github/workflows/integration.yml, docs/merge-report.md, docs/task-log.md
