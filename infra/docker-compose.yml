@@ -85,7 +85,7 @@ services:
     restart: unless-stopped
 
   tika:
-    image: apache/tika:2.9.0-full
+    image: apache/tika:3.2.3.0-full
     ports: ["9998:9998"]
     networks: [kpknet]
     restart: unless-stopped
