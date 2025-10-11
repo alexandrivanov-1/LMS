@@ -52,7 +52,7 @@ def _read_object(client: Minio, bucket: str, object_name: str) -> bytes:
             return response.read()
         except S3Error as exc:
             raise RuntimeError(
-                f"Ошибка чтения объекта {bucket}/{object_name}: {exc.code}"
+                f"Не удалось дочитать объект {bucket}/{object_name}: {exc.code}"
             ) from exc
         except Exception:
             raise
