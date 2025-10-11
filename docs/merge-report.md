@@ -87,7 +87,7 @@
 | `feat/stage1-env-doc` | Pending | Ожидает синхронизации с актуальным `main` | Не запускались в этой сессии | После мерджа Stage 1 кода обновить документацию, проверить CI/Integration и слить |
 | `feat/indexer-onnx` | Pending | Не проверялась на уникальные изменения | Не запускались в этой сессии | Сравнить с `main`; при отсутствии diff удалить ветку, иначе пройти стандартный цикл PR |
 | `main` post-merge | Pending | 2025-10-10: локальные модульные тесты парсера пройдены | Не запускались в этой сессии | После слияний запустить CI/Integration и smoke-тест в Codespaces |
-| `codex/show-project-lms-document-structure` | In Progress | 2025-10-11 10:10 UTC: `CI` упал на `ruff` (E402), `Integration` завершился успешно после обновления образа Tika | CI: FAIL (run 18427799145, ruff E402); Integration: см. run 18427799148 | Исправить импорт в `services/parser/tests/test_main.py`, перезапустить оба workflow и подготовить merge PR #4 |
+| `codex/show-project-lms-document-structure` | ✅ Done (awaiting merge) | 2025-10-11 10:55 UTC: починены proxy upload и создание бакета MinIO, Actions зелёные | CI: OK (run 18428464791); Integration: OK (run 18428465259) | Обновить описание PR #4, выполнить squash-merge и удалить ветку |
 
 > **Напоминание.** После выполнения каждого шага обновляйте таблицу: фиксируйте дату проверки, ссылки на успешные Actions и краткий результат (OK/FAIL). Это упрощает аудит выполнения Stage 1.
 

@@ -32,3 +32,5 @@
 - Файлы: infra/nginx/conf.d/default.conf, docs/merge-report.md, docs/task-log.md
 - Цель: устранить 500 при загрузке в Integration и подготовить merge ветки `codex/show-project-lms-document-structure`.
 - Файлы: services/gateway/requirements.txt, .github/workflows/integration.yml, docs/merge-report.md, docs/task-log.md
+- Завершено: CI/Integration на ветке `codex/show-project-lms-document-structure` зелёные (CI run 18428464791, Integration run 18428465259); подготовка к merge.
+- Файлы: docs/merge-report.md, docs/task-log.md, services/gateway/app/main.py, services/gateway/requirements.txt, services/ingest/app/main.py
