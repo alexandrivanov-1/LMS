@@ -1,7 +1,6 @@
 import contextlib
 import json
 import os
-
 import httpx
 import psycopg
 from fastapi import FastAPI
@@ -39,30 +38,31 @@ def _split(text: str, size: int = 1000, overlap: int = 100) -> list[str]:
     return res
 
 
-def _read_object(client: Minio, bucket: str, key: str) -> bytes:
-    """Возвращает содержимое объекта MinIO, гарантируя освобождение соединения."""
+def _close_response(response: object) -> None:
+    for attr in ("close", "release_conn"):
+        with contextlib.suppress(AttributeError):
+            getattr(response, attr)()
 
+
+def _read_object(client: Minio, bucket: str, object_name: str) -> bytes:
     response = None
     try:
-        response = client.get_object(bucket, key)
+        response = client.get_object(bucket, object_name)
         try:
             return response.read()
         except S3Error as exc:
             raise RuntimeError(
-                f"Не удалось дочитать объект {bucket}/{key}: {exc.code}"
+                f"Ошибка чтения объекта {bucket}/{object_name}: {exc.code}"
             ) from exc
         except Exception:
             raise
     except S3Error as exc:
         raise RuntimeError(
-            f"Не удалось получить объект {bucket}/{key}: {exc.code}"
+            f"Не удалось получить объект {bucket}/{object_name}: {exc.code}"
         ) from exc
     finally:
         if response is not None:
-            with contextlib.suppress(AttributeError):
-                response.close()
-            with contextlib.suppress(AttributeError):
-                response.release_conn()
+            _close_response(response)
 
 
 @app.post("/parser/scan")
