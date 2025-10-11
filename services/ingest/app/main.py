@@ -8,6 +8,7 @@ import psycopg
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
 from minio import Minio
+from minio.error import S3Error
 
 app = FastAPI(title="ingest")
 
@@ -20,6 +21,7 @@ client = Minio(
     secure=MINIO_ENDPOINT.startswith("https://"),
 )
 BUCKET = os.getenv("MINIO_BUCKET", "sources")
+_bucket_ready = False
 DSN = os.getenv("POSTGRES_DSN")
 
 
@@ -30,6 +32,15 @@ def health():
 
 @app.post("/ingest/upload")
 async def upload(files: list[UploadFile] = File(...)):
+    global _bucket_ready
+    if not _bucket_ready:
+        try:
+            if not client.bucket_exists(BUCKET):
+                client.make_bucket(BUCKET)
+        except S3Error as exc:
+            if exc.code not in {"BucketAlreadyOwnedByYou", "BucketAlreadyExists"}:
+                raise
+        _bucket_ready = True
     saved = []
     with psycopg.connect(DSN) as conn:
         with conn.cursor() as cur:
