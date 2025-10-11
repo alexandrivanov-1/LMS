@@ -53,7 +53,8 @@ def search(payload: SearchIn):
                 last_error = exc
                 time.sleep(2)
         else:
-            raise last_error or RuntimeError("Search backend unavailable")
+            warning = str(last_error or "Search backend unavailable")
+            return JSONResponse({"count": 0, "items": [], "warning": warning})
         items = []
         for r in res:
             p = r.payload or {}
