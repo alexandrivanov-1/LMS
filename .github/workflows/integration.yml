@@ -50,6 +50,7 @@ jobs:
           curl -fsS -F "files=@/tmp/test.txt" http://localhost/ingest/upload
           curl -fsS -X POST http://localhost/parser/scan
           curl -fsS -X POST http://localhost/indexer/run
+          sleep 5
           curl -fsS -H "Content-Type: application/json" -d '{"query":"azhynka","top_k":3}' http://localhost/search
 
       - name: Logs (artifact)
