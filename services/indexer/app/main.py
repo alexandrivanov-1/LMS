@@ -21,7 +21,7 @@ client = QdrantClient(url=QDRANT_URL)
 
 def _connect() -> psycopg.Connection:
     last_error: psycopg.Error | None = None
-    for _ in range(15):
+    for _ in range(30):
         try:
             return psycopg.connect(DSN)
         except psycopg.OperationalError as exc:  # pragma: no cover - network
@@ -47,7 +47,7 @@ def pseudo_embed(text: str, dim: int) -> np.ndarray:
 
 def ensure_collection():
     last_error: Exception | None = None
-    for _ in range(15):
+    for _ in range(30):
         try:
             cols = [c.name for c in client.get_collections().collections]
             if COLL not in cols:
@@ -89,13 +89,13 @@ def run(limit: int = 1000):
             points.append(PointStruct(id=str(cid), vector=vec, payload=payload))
     if points:
         last_error: Exception | None = None
-        for _ in range(10):
+        for _ in range(20):
             try:
                 client.upsert(collection_name=COLL, points=points)
                 break
             except Exception as exc:  # pragma: no cover - network
                 last_error = exc
-                time.sleep(2)
+                time.sleep(3)
         else:
             raise last_error or RuntimeError("Unable to upsert into Qdrant")
     return JSONResponse({"upserted": len(points)})

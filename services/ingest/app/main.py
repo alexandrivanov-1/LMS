@@ -26,7 +26,7 @@ DSN = os.getenv("POSTGRES_DSN")
 
 def _connect() -> psycopg.Connection:
     last_error: psycopg.Error | None = None
-    for _ in range(10):
+    for _ in range(20):
         try:
             return psycopg.connect(DSN)
         except psycopg.OperationalError as exc:  # pragma: no cover - network
