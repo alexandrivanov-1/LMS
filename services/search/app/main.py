@@ -1,4 +1,5 @@
 import hashlib
+import time
 import os
 import struct
 
@@ -38,7 +39,20 @@ def pseudo_embed(text: str, dim: int) -> np.ndarray:
 @app.post("/search")
 def search(payload: SearchIn):
     vec = pseudo_embed(payload.query[:4000], VECTOR_DIM).tolist()
-    res = client.search(collection_name=COLL, query_vector=vec, limit=payload.top_k)
+    last_error: Exception | None = None
+    for _ in range(10):
+        try:
+            res = client.search(
+                collection_name=COLL,
+                query_vector=vec,
+                limit=payload.top_k,
+            )
+            break
+        except Exception as exc:  # pragma: no cover - network
+            last_error = exc
+            time.sleep(2)
+    else:
+        raise last_error or RuntimeError("Search backend unavailable")
     items = []
     for r in res:
         p = r.payload or {}
