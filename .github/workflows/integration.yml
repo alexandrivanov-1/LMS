@@ -41,6 +41,9 @@ jobs:
           done
           echo "gateway didn't respond"; docker compose -f infra/docker-compose.yml ps; exit 1
 
+      - name: Warm up services
+        run: sleep 30
+
       - name: "Smoke upload parser index search"
         run: |
           echo "hello from ci" > /tmp/test.txt
