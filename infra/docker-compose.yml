@@ -118,7 +118,7 @@ services:
       PARSER_URL: http://parser:8000
       INDEXER_URL: http://indexer:8000
       SEARCH_URL: http://search:8000
-    depends_on: [postgres, minio, qdrant, neo4j, redis, tika, piper]
+    depends_on: [postgres, minio, qdrant, neo4j, redis, tika]
     networks: [kpknet]
     restart: unless-stopped
 
