@@ -18,7 +18,7 @@ jobs:
 
       - name: Create .env
         run: |
-          cat > .env << 'EOF'
+          cat > infra/.env << 'EOF'
           POSTGRES_DB=kpk
           POSTGRES_USER=kpk
           POSTGRES_PASSWORD=changeme
@@ -39,16 +39,31 @@ jobs:
             curl -fsS http://localhost/health && exit 0 || true
             sleep 5
           done
-          echo "gateway didn't respond"; docker compose -f infra/docker-compose.yml ps; exit 1
+          echo "gateway didn't respond"
+          docker compose -f infra/docker-compose.yml ps
+          docker compose -f infra/docker-compose.yml logs nginx || true
+          exit 1
 
-      - name: Smoke: upload + parser + index + search
+      - name: Smoke upload parser index search
         run: |
+          set -e
           echo "hello from ci" > /tmp/test.txt
-          curl -fsS -F "files=@/tmp/test.txt" http://localhost/ingest/upload
-          curl -fsS -X POST http://localhost/parser/scan
-          curl -fsS -X POST http://localhost/indexer/run
-          curl -fsS -H 'Content-Type: application/json' \
-            -d '{"query":"закупка","top_k":3}' http://localhost/search
+          curl -fsS -F "files=@/tmp/test.txt" http://localhost/ingest/upload || {
+            docker compose -f infra/docker-compose.yml logs ingest gateway || true
+            exit 1
+          }
+          curl -fsS -X POST http://localhost/parser/scan || {
+            docker compose -f infra/docker-compose.yml logs parser gateway ingest || true
+            exit 1
+          }
+          curl -fsS -X POST http://localhost/indexer/run || {
+            docker compose -f infra/docker-compose.yml logs indexer search || true
+            exit 1
+          }
+          curl -fsS -H "Content-Type: application/json" -d '{"query":"azhynka","top_k":3}' http://localhost/search || {
+            docker compose -f infra/docker-compose.yml logs search gateway || true
+            exit 1
+          }
 
       - name: Logs (artifact)
         if: always()

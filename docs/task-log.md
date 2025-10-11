@@ -1,15 +1,38 @@
 # Лог задач
 
-- Цель: синхронизировать изменения по политике агента, документации и харднингу парсера с GitHub.
-- Файлы:
-  - AGENTS.md
-  - docs/consultation-guidelines.md
-  - docs/merge-report.md
-  - docs/operation-algorithm.md
-  - docs/task-log.md
-  - services/__init__.py
-  - services/parser/__init__.py
-  - services/parser/app/__init__.py
-  - services/parser/app/main.py
-  - services/parser/tests/__init__.py
-  - services/parser/tests/test_main.py
+- Цель: добавить безопасное чтение объектов MinIO и модульные тесты парсера.
+- Файлы: services/parser/app/main.py, services/parser/app/__init__.py, services/parser/tests/test_main.py, services/parser/tests/__init__.py
+- Цель: перенести изменения парсера в GitHub через PR `feat/parser-read-object`.
+- Файлы: services/parser/app/main.py, services/parser/app/__init__.py, services/parser/tests/test_main.py, services/parser/tests/__init__.py, docs/task-log.md
+- Цель: синхронизировать `main` на GitHub с полной актуальной версией проекта.
+- Файлы: весь репозиторий (коммит фиксации состояния), docs/task-log.md
+- Цель: исправить синтаксис CI integration и подготовить merge ветки `chore/agents-policy`.
+- Файлы: .github/workflows/integration.yml, docs/task-log.md
+- Цель: подтвердить исправление integration workflow, синхронизировать документацию и подготовить отчёт по задаче пользователя.
+- Файлы: .github/workflows/integration.yml, docs/merge-report.md, docs/task-log.md
+- Цель: подготовить чеклист синхронизации репозитория с веткой `main` на GitHub и обновить отчёт.
+- Файлы: docs/github-sync-checklist.md, docs/merge-report.md, docs/task-log.md
+- Цель: подготовить фиксацию замечаний пользователя и подтвердить наличие всех изменений перед публикацией в main.
+- Файлы: AGENTS.md, .github/workflows/integration.yml, docs/consultation-guidelines.md, docs/github-sync-checklist.md, docs/merge-report.md, docs/operation-algorithm.md, docs/task-log.md, services/parser/app/main.py, services/parser/tests/test_main.py
+- Цель: актуализировать README и лог задач согласно новым регламентам публикации Stage 1.
+- Файлы: README.md, docs/task-log.md
+- Цель: актуализировать playbook Stage 1 и зафиксировать статус задач по синхронизации.
+- Файлы: docs/merge-report.md, docs/task-log.md
+- Цель: зафиксировать мастер-промпт завершения Stage 1 для передачи агенту Codex.
+- Файлы: docs/master-prompt-stage1.md, docs/task-log.md
+- Цель: подтвердить успешный локальный прогон модульных тестов парсера и обновить отчёт Stage 1.
+- Файлы: docs/merge-report.md, docs/task-log.md
+- Цель: выполнить мастер-промпт завершения Stage 1 и зафиксировать реальные проверки.
+- Файлы: .github/workflows/integration.yml, docs/merge-report.md, docs/task-log.md
+- Цель: уточнить статус Actions в отчёте и зафиксировать невыполненные шаги Stage 1.
+- Файлы: docs/merge-report.md, docs/task-log.md
+- Цель: запустить CI/Integration для ветки `codex/show-project-lms-document-structure` и устранить падение из-за образа Tika.
+- Файлы: infra/docker-compose.yml, .github/workflows/ci.yml, .github/workflows/integration.yml, docs/merge-report.md, docs/task-log.md, services/parser/tests/test_main.py
+- Цель: устранить рестарты `infra-nginx-1` в Integration и зафиксировать успешный прогон ветки `codex/show-project-lms-document-structure`.
+- Файлы: infra/nginx/conf.d/default.conf, docs/merge-report.md, docs/task-log.md
+- Цель: устранить 500 при загрузке в Integration и подготовить merge ветки `codex/show-project-lms-document-structure`.
+- Файлы: services/gateway/requirements.txt, .github/workflows/integration.yml, docs/merge-report.md, docs/task-log.md
+- Завершено: CI/Integration на ветке `codex/show-project-lms-document-structure` зелёные (CI run 18428464791, Integration run 18428465259); подготовка к merge.
+- Файлы: docs/merge-report.md, docs/task-log.md, services/gateway/app/main.py, services/gateway/requirements.txt, services/ingest/app/main.py
+- Завершено: ветка `codex/show-project-lms-document-structure` синхронизирована с `main`, Actions после фикса сообщения прошли (CI run 18428579010, Integration run 18428579746).
+- Файлы: docs/merge-report.md, docs/task-log.md, services/parser/app/main.py

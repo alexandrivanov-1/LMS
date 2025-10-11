@@ -30,10 +30,11 @@ def health():
 
 def _split(text: str, size: int = 1000, overlap: int = 100) -> list[str]:
     res: list[str] = []
-    i, n = 0, len(text)
-    while i < n:
+    step = max(size - overlap, 1)
+    i = 0
+    while i < len(text):
         res.append(text[i : i + size])
-        i += max(size - overlap, 1)
+        i += step
     return res
 
 
@@ -44,22 +45,24 @@ def _close_response(response: object) -> None:
 
 
 def _read_object(client: Minio, bucket: str, object_name: str) -> bytes:
+    response = None
     try:
         response = client.get_object(bucket, object_name)
-    except S3Error as exc:
-        raise RuntimeError(
-            f"Не удалось получить объект {bucket}/{object_name}: {exc.message}"
-        ) from exc
-    try:
         try:
-            data = response.read()
+            return response.read()
         except S3Error as exc:
             raise RuntimeError(
-                f"Ошибка чтения объекта {bucket}/{object_name}: {exc.message}"
+                f"Не удалось дочитать объект {bucket}/{object_name}: {exc.code}"
             ) from exc
-        return data
+        except Exception:
+            raise
+    except S3Error as exc:
+        raise RuntimeError(
+            f"Не удалось получить объект {bucket}/{object_name}: {exc.code}"
+        ) from exc
     finally:
-        _close_response(response)
+        if response is not None:
+            _close_response(response)
 
 
 @app.post("/parser/scan")

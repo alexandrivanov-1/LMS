@@ -1,74 +1,70 @@
-from __future__ import annotations
-
-from types import SimpleNamespace
-from unittest.mock import MagicMock
-
 import pytest
 from minio.error import S3Error
-
-from services.parser.app import _read_object, _split
-
-
-class DummyS3Error(S3Error):
-    """Упрощённое исключение для удобного создания в тестах."""
-
-    def __init__(self, message: str):
-        super().__init__(
-            code="500",
-            message=message,
-            resource="/bucket/object",
-            request_id="req",
-            host_id="host",
-            response=SimpleNamespace(),
-        )
+from ..app.main import _read_object, _split
 
 
-def test_split_returns_chunks_with_overlap():
-    text = "abcdefghij"
-    chunks = _split(text, size=4, overlap=2)
-    assert chunks == ["abcd", "cdef", "efgh", "ghij", "ij"]
+class DummyResponse:
+    def __init__(self, payload=b"data", *, fail_on_read=False):
+        self.payload = payload
+        self.fail_on_read = fail_on_read
+        self.closed = False
+        self.released = False
+
+    def read(self):
+        if self.fail_on_read:
+            raise S3Error(500, "InternalError", "boom", "resource", "request", "host")
+        return self.payload
+
+    def close(self):
+        self.closed = True
+
+    def release_conn(self):
+        self.released = True
 
 
-def test_split_handles_empty_text():
-    assert _split("", size=3, overlap=1) == []
+class DummyClient:
+    def __init__(self, response=None, *, fail_on_get=False):
+        self.response = response or DummyResponse()
+        self.fail_on_get = fail_on_get
+
+    def get_object(self, bucket, key):
+        if self.fail_on_get:
+            raise S3Error(404, "NoSuchKey", "missing", bucket, "request", "host")
+        return self.response
 
 
-def test_read_object_returns_bytes_and_closes_response():
-    response = MagicMock()
-    response.read.return_value = b"payload"
+def test_split_respects_overlap():
+    chunks = _split("abcdefghij", size=4, overlap=1)
+    assert chunks == ["abcd", "defg", "ghij", "j"]
 
-    client = MagicMock()
-    client.get_object.return_value = response
 
-    data = _read_object(client, "bucket", "object")
+def test_read_object_returns_payload_and_closes():
+    response = DummyResponse(payload=b"payload")
+    client = DummyClient(response=response)
+
+    data = _read_object(client, "bucket", "key")
 
     assert data == b"payload"
-    client.get_object.assert_called_once_with("bucket", "object")
-    response.read.assert_called_once()
-    response.close.assert_called_once()
-    response.release_conn.assert_called_once()
+    assert response.closed
+    assert response.released
 
 
-def test_read_object_wraps_get_errors():
-    client = MagicMock()
-    client.get_object.side_effect = DummyS3Error("boom")
+def test_read_object_translates_get_errors():
+    client = DummyClient(fail_on_get=True)
 
     with pytest.raises(RuntimeError) as exc:
-        _read_object(client, "bucket", "object")
+        _read_object(client, "bucket", "key")
 
-    assert "Не удалось получить объект" in str(exc.value)
+    assert "Не удалось получить объект bucket/key" in str(exc.value)
 
 
-def test_read_object_wraps_read_errors():
-    response = MagicMock()
-    response.read.side_effect = DummyS3Error("broken")
-
-    client = MagicMock()
-    client.get_object.return_value = response
+def test_read_object_translates_read_errors_and_closes():
+    response = DummyResponse(fail_on_read=True)
+    client = DummyClient(response=response)
 
     with pytest.raises(RuntimeError) as exc:
-        _read_object(client, "bucket", "object")
+        _read_object(client, "bucket", "key")
 
-    assert "Ошибка чтения объекта" in str(exc.value)
-    response.close.assert_called_once()
-    response.release_conn.assert_called_once()
+    assert "Не удалось дочитать объект bucket/key" in str(exc.value)
+    assert response.closed
+    assert response.released

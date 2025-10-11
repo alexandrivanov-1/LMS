@@ -20,18 +20,16 @@ def health():
 
 @app.post("/ingest/upload")
 async def proxy_ingest_upload(request: Request):
-    form = await request.form()
-    files, fields = [], []
-    for key, value in form.multi_items():
-        if hasattr(value, "filename"):
-            files.append(
-                ("files", (value.filename, await value.read(), value.content_type))
-            )
-        else:
-            fields.append((key, str(value)))
+    body = await request.body()
+    headers: dict[str, str] = {}
+    content_type = request.headers.get("content-type")
+    if content_type:
+        headers["Content-Type"] = content_type
     async with httpx.AsyncClient(timeout=60.0) as client:
         resp = await client.post(
-            f"{INGEST_URL}/ingest/upload", files=files, data=fields
+            f"{INGEST_URL}/ingest/upload",
+            content=body,
+            headers=headers or None,
         )
     return JSONResponse(resp.json(), status_code=resp.status_code)
 

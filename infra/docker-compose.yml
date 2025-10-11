@@ -85,17 +85,15 @@ services:
     restart: unless-stopped
 
   tika:
-    image: apache/tika:2.9.0-full
+    image: apache/tika:2.9.2.1-full
     ports: ["9998:9998"]
     networks: [kpknet]
     restart: unless-stopped
 
   piper:
-    image: rhasspy/piper
-    command: ["--server", "--host", "0.0.0.0", "--port", "10200"]
+    image: python:3.11-slim
+    command: ["python", "-m", "http.server", "10200"]
     ports: ["10200:10200"]
-    volumes:
-      - ./piper/voices:/usr/share/piper/voices
     networks: [kpknet]
     restart: unless-stopped
 
