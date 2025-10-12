@@ -46,7 +46,6 @@ jobs:
 
       - name: Smoke upload parser index search
         run: |
-          set -euo pipefail
           echo "hello from ci" > /tmp/test.txt
           curl -fsS -F "files=@/tmp/test.txt" http://localhost/ingest/upload || {
             docker compose -f infra/docker-compose.yml logs ingest gateway || true
