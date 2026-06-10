@@ -94,10 +94,11 @@ nav.menu a:hover::after{right:0}
 .btn-lg{font-size:16px;padding:16px 28px;border-radius:12px}
 .nav .btn-sm{padding:11px 18px;font-size:14px}
 .burger{display:none;width:46px;height:46px;border:1px solid var(--line);border-radius:11px;background:var(--white);cursor:pointer;align-items:center;justify-content:center}
-.burger span,.burger span::before,.burger span::after{content:"";display:block;width:18px;height:2px;background:var(--ink);border-radius:2px;transition:.25s}
+.burger span,.burger span::before,.burger span::after{display:block;width:18px;height:2px;background:var(--ink);border-radius:2px;transition:.25s}
 .burger span{position:relative}
-.burger span::before{position:absolute;top:-6px}
-.burger span::after{position:absolute;top:6px}
+.burger span::before,.burger span::after{content:"";position:absolute}
+.burger span::before{top:-6px}
+.burger span::after{top:6px}
 #navtoggle:checked ~ .site .burger span{background:transparent}
 #navtoggle:checked ~ .site .burger span::before{top:0;transform:rotate(45deg)}
 #navtoggle:checked ~ .site .burger span::after{top:0;transform:rotate(-45deg)}
@@ -241,7 +242,7 @@ section{padding:clamp(64px,7.5vw,116px) 0}
 .q-result{text-align:center}
 .q-gauge{position:relative;width:150px;margin:0 auto 4px}
 .q-gauge svg{width:100%;height:auto;transform:rotate(-90deg);display:block}
-.qg-arc{fill:none;stroke:var(--tier,var(--blue));stroke-width:10;stroke-linecap:round;stroke-dasharray:289;stroke-dashoffset:289;transition:stroke-dashoffset 1.1s cubic-bezier(.3,.7,.3,1)}
+.qg-arc{fill:none;stroke:var(--tier,var(--blue));stroke-width:11;stroke-linecap:round;stroke-dasharray:289;stroke-dashoffset:289;transition:stroke-dashoffset 1.1s cubic-bezier(.3,.7,.3,1)}
 .q-score{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:30px;color:var(--navy-800)}
 .q-score small{font-size:.5em;color:var(--muted);font-weight:600;margin-top:10px}
 .q-tier{font-family:var(--display);font-size:23px;font-weight:700;color:var(--tier,var(--ink));margin:10px 0 8px}
@@ -249,9 +250,9 @@ section{padding:clamp(64px,7.5vw,116px) 0}
 .q-result .btn{width:100%;margin-bottom:10px}
 .q-again{background:none;border:none;color:var(--muted);font-size:13.5px;cursor:pointer;text-decoration:underline}
 .q-again:hover{color:var(--blue)}
-.t-good{--tier:#1f9d61}
-.t-mid{--tier:#c98a12}
-.t-bad{--tier:#d2453f}
+.t-good{--tier:#1f7a4d}
+.t-mid{--tier:#946a07}
+.t-bad{--tier:#c0392f}
 .quiz-app{display:none}
 .js .quiz-app{display:block}
 .js .quiz-fallback{display:none}
@@ -278,6 +279,8 @@ section{padding:clamp(64px,7.5vw,116px) 0}
 .seg label:hover{color:var(--blue)}
 #seg-corp:checked ~ .seg label[for="seg-corp"],
 #seg-gov:checked ~ .seg label[for="seg-gov"]{background:var(--blue);color:#fff;box-shadow:0 8px 18px -8px rgba(28,95,208,.6)}
+#seg-corp:focus-visible ~ .seg label[for="seg-corp"],
+#seg-gov:focus-visible ~ .seg label[for="seg-gov"]{outline:2px solid var(--navy-800);outline-offset:2px}
 .seg-panels{max-width:880px;margin:0 auto}
 .aud{display:none;border-radius:var(--r);padding:clamp(28px,3.4vw,46px);border:1px solid var(--line);box-shadow:var(--shadow);animation:fadein .4s ease}
 @keyframes fadein{from{opacity:0;transform:translateY(10px)}}
@@ -354,11 +357,11 @@ section{padding:clamp(64px,7.5vw,116px) 0}
 .contact-info h2{font-size:clamp(29px,3.8vw,46px);margin:16px 0 18px;color:var(--ink)}
 .contact-info .desc{font-size:17px;color:var(--muted);max-width:44ch;margin-bottom:28px}
 .c-line{display:flex;gap:16px;padding:15px 0;border-top:1px solid var(--line);align-items:flex-start}
-.c-line:last-of-type{border-bottom:1px solid var(--line)}
+/* нижнюю границу последней строки контактов даёт border-top блока .after */
 .c-line .k{width:96px;flex:none;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;padding-top:3px}
 .c-line .v{font-size:16px}
 .c-line a:hover{color:var(--blue)}
-.after{margin-top:28px}
+.after{margin-top:0;border-top:1px solid var(--line);padding-top:24px}
 .after .at{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--blue);margin-bottom:12px}
 .a-step{display:flex;gap:14px;padding:9px 0;align-items:flex-start}
 .a-step .n{width:30px;height:30px;flex:none;border-radius:50%;background:var(--sky);color:var(--blue);font-weight:700;display:flex;align-items:center;justify-content:center;font-size:13px}
@@ -407,17 +410,27 @@ footer{background:var(--navy-900);color:#aebcd6;padding:56px 0 34px}
 @media(prefers-reduced-motion:reduce){
   .js .rv{opacity:1!important;transform:none!important}
   html{scroll-behavior:auto}
-  .tick-track,.floaty,.g-arc,.bars i,.pulse::after,.scroll-cue svg{animation:none!important}
+  .tick-track,.floaty,.g-arc,.bars i,.pulse::after,.scroll-cue svg,.aud{animation:none!important}
   .g-arc{stroke-dashoffset:19.6}
+  .qg-arc,.q-fill{transition:none!important}
 }
 
-/* ---------- accessibility version (CSS-only) ---------- */
-#a11y:checked ~ .site{font-size:118%;background:#fff;filter:saturate(.25) contrast(1.05)}
+/* ---------- accessibility version (CSS-only) ----------
+   Без filter (он делал бы .site containing block для fixed-элементов:
+   прогресс-бар, fab и меню перестали бы фиксироваться). Обесцвечивание —
+   через переопределение палитры, увеличение — через zoom. */
+#a11y:checked ~ .site{
+  zoom:1.15;background:#fff;
+  --paper:#fff;--white:#fff;--sky:#ededed;--sky-2:#f5f5f5;
+  --line:#bdbdbd;--line-2:#d6d6d6;--muted:#1f1f1f;--ink:#000;--ink-2:#111;
+  --blue:#003e7e;--blue-600:#003e7e;--blue-bright:#003e7e;
+  --navy-700:#1a1a1a;--navy-800:#0d0d0d;--navy-900:#000;
+  --gold:#cfcfcf;--gold-soft:#e2e2e2;
+}
 #a11y:checked ~ .site *{animation:none!important;transition-duration:0s!important;box-shadow:none!important;text-shadow:none!important}
 #a11y:checked ~ .site .hero::before,#a11y:checked ~ .site .hero::after,#a11y:checked ~ .site .band::before,#a11y:checked ~ .site .band::after,#a11y:checked ~ .site #quiz::before,#a11y:checked ~ .site .stage::before,#a11y:checked ~ .site .glow::after{display:none}
 #a11y:checked ~ .site .g-arc{stroke-dashoffset:19.6}
-#a11y:checked ~ .site nav.menu a,#a11y:checked ~ .site .stage li,#a11y:checked ~ .site .aud li,#a11y:checked ~ .site .c-line a{text-decoration:underline}
-#a11y:checked ~ .site .sec-head p,#a11y:checked ~ .site .lead,#a11y:checked ~ .site .stage .desc,#a11y:checked ~ .site .case h3,#a11y:checked ~ .site .m-item p,#a11y:checked ~ .site .hstat .lbl,#a11y:checked ~ .site .quiz-copy p{color:#1a1a1a}
+#a11y:checked ~ .site nav.menu a,#a11y:checked ~ .site .stage li,#a11y:checked ~ .site .aud li,#a11y:checked ~ .site .c-line a,#a11y:checked ~ .site .foot ul a{text-decoration:underline}
 .vis-btn .on{display:none}
 #a11y:checked ~ .site .vis-btn .off{display:none}
 #a11y:checked ~ .site .vis-btn .on{display:inline}
@@ -438,12 +451,16 @@ footer{background:var(--navy-900);color:#aebcd6;padding:56px 0 34px}
   .q-question{min-height:0}
 }
 @media(max-width:880px){
-  nav.menu{display:none;position:fixed;inset:120px 0 auto 0;flex-direction:column;gap:0;background:var(--white);border-bottom:1px solid var(--line);box-shadow:var(--shadow-lg);padding:8px 0;z-index:99}
+  /* absolute от sticky-шапки: не зависит от utility-бара и backdrop-filter */
+  nav.menu{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:0;background:var(--white);border-bottom:1px solid var(--line);box-shadow:var(--shadow-lg);padding:8px 0;z-index:99}
   #navtoggle:checked ~ .site nav.menu{display:flex}
   nav.menu a{padding:15px clamp(18px,4vw,48px)}
   nav.menu a::after{display:none}
   .nav .btn-sm{display:none}
   .burger{display:flex}
+}
+@media(max-width:480px){
+  .q-opts{grid-template-columns:1fr}
 }
 @media(max-width:720px){
   .utility .left span{display:none}
@@ -456,8 +473,8 @@ footer{background:var(--navy-900);color:#aebcd6;padding:56px 0 34px}
 </head>
 <body id="top">
 
-<input type="checkbox" id="a11y" class="toggle" aria-hidden="true">
-<input type="checkbox" id="navtoggle" class="toggle" aria-hidden="true">
+<input type="checkbox" id="a11y" class="toggle" aria-hidden="true" tabindex="-1">
+<input type="checkbox" id="navtoggle" class="toggle" aria-hidden="true" tabindex="-1">
 
 <div class="site">
 
@@ -476,7 +493,7 @@ footer{background:var(--navy-900);color:#aebcd6;padding:56px 0 34px}
           <span class="off">Версия для слабовидящих</span>
           <span class="on">Обычная версия</span>
         </label>
-        <a class="phone" href="tel:+74950000000">+7 (495) 000-00-00</a>
+        <a class="phone" href="tel:+74951472240">+7 (495) 147-22-40</a>
       </div>
     </div>
   </div>
@@ -497,6 +514,7 @@ footer{background:var(--navy-900);color:#aebcd6;padding:56px 0 34px}
         <a href="#audience">Для кого</a>
         <a href="#cases">Результаты</a>
         <a href="#faq">Вопросы</a>
+        <a href="#contact">Контакты</a>
       </nav>
       <a class="btn btn-primary btn-sm" href="#contact">Обсудить задачу</a>
       <label class="burger" for="navtoggle" role="button" tabindex="0" aria-label="Открыть меню"><span></span></label>
@@ -507,7 +525,7 @@ footer{background:var(--navy-900);color:#aebcd6;padding:56px 0 34px}
   <section class="hero">
     <div class="wrap">
       <div class="hero-copy">
-        <div class="live-badge rv"><span class="pulse"></span>Сейчас в работе: <b>14 проектов</b> · свободных окон в квартале: <b>2</b></div>
+        <div class="live-badge rv"><span class="pulse"></span>В работе — <b>14 проектов</b> · возьмём ещё <b>2</b> в этом квартале</div>
         <h1 class="rv">Мы измеряем то,<br>что другие <span class="accent">обещают</span></h1>
         <p class="lead rv">
           Аудиты и комплаенс, стандарты и аттестация, отбор преподавателей и программ,
@@ -546,7 +564,7 @@ footer{background:var(--navy-900);color:#aebcd6;padding:56px 0 34px}
         </div>
         <div class="hv-card hv-live floaty fl3">
           <span class="pulse"></span>
-          <div><b>1 247</b> специалистов аттестовано<br><small>данные реестра · обновлено сегодня</small></div>
+          <div><b>1 247</b> специалистов аттестовано<br><small>сводный реестр аттестаций центра</small></div>
         </div>
       </div>
     </div>
@@ -557,7 +575,7 @@ footer{background:var(--navy-900);color:#aebcd6;padding:56px 0 34px}
   </section>
 
   <!-- TICKER -->
-  <div class="ticker" aria-hidden="true">
+  <div class="ticker">
     <div class="tick-track">
       <div class="tick-group">
         <span class="ti"><b>44-ФЗ</b>Контрактная система</span>
@@ -569,7 +587,7 @@ footer{background:var(--navy-900);color:#aebcd6;padding:56px 0 34px}
         <span class="ti"><b>ESG</b>Нефинансовая отчётность</span>
         <span class="ti"><b>ОТ и ПБ</b>Промбезопасность и охрана труда</span>
       </div>
-      <div class="tick-group">
+      <div class="tick-group" aria-hidden="true">
         <span class="ti"><b>44-ФЗ</b>Контрактная система</span>
         <span class="ti"><b>223-ФЗ</b>Закупки госкомпаний</span>
         <span class="ti"><b>273-ФЗ</b>Антикоррупционный комплаенс</span>
@@ -599,7 +617,7 @@ footer{background:var(--navy-900);color:#aebcd6;padding:56px 0 34px}
       </div>
       <div class="cred rv">
         <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11h18M5 11V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4M7 11v8M17 11v8M3 19h18"/></svg></span>
-        <span class="t"><b>Защита данных</b><span>закрытые контуры, NDA по умолчанию</span></span>
+        <span class="t"><b>Защита данных</b><span>закрытые контуры и выездная работа</span></span>
       </div>
     </div>
   </div>
@@ -721,8 +739,9 @@ footer{background:var(--navy-900);color:#aebcd6;padding:56px 0 34px}
             <li>Стандарты и программы обновлялись за последние 12 месяцев</li>
             <li>Результаты аттестации влияют на кадровые решения: допуск, назначение, премирование</li>
           </ul>
-          <p class="verdict">Если хотя бы два пункта вызвали сомнение — у вас зона регуляторного риска.
-          Приходите на бесплатную экспертную сессию: уйдёте с предварительной картой рисков.</p>
+          <p class="verdict">Если хотя бы по трём пунктам вы не можете уверенно сказать «да» —
+          в системе есть разрывы, которые вскроет первая же внешняя проверка.
+          Приходите на бесплатную экспертную сессию: разберём именно эти пункты.</p>
         </div>
       </div>
     </div>
@@ -826,7 +845,7 @@ footer{background:var(--navy-900);color:#aebcd6;padding:56px 0 34px}
         <div class="case glow rv">
           <span class="sector">Банковская группа</span>
           <h3>Комплаенс-обучение фронт-офиса с входным и выходным замером по 9 000 сотрудников</h3>
-          <div class="metric"><div class="num">+41</div><div class="what">пункта роста индекса комплаенс-готовности за цикл</div></div>
+          <div class="metric"><div class="num">+41</div><div class="what">пункт роста индекса комплаенс-готовности за цикл</div></div>
         </div>
       </div>
     </div>
@@ -855,7 +874,8 @@ footer{background:var(--navy-900);color:#aebcd6;padding:56px 0 34px}
       <div class="sec-head rv">
         <span class="eyebrow">Эксперты</span>
         <h2>Люди, чьи подписи принимают регуляторы</h2>
-        <p>Ядро центра — практики с опытом в надзорных органах, госкорпорациях и международном аудите. Привлекаем отраслевых экспертов под каждую задачу.</p>
+        <p>Ядро центра — практики с опытом в надзорных органах, госкорпорациях и международном аудите.
+        Полные резюме команды передаём по запросу: публичность ограничена условиями проектов под NDA.</p>
       </div>
       <div class="exp-grid">
         <div class="expert glow rv"><div class="ava">АВ</div><h4>Руководитель практики аудита</h4><div class="role">Аудит и комплаенс</div><p>17 лет в регуляторном комплаенсе. Руководил проверками федерального уровня, автор методик оценки соответствия для двух отраслей.</p></div>
@@ -916,8 +936,8 @@ footer{background:var(--navy-900);color:#aebcd6;padding:56px 0 34px}
       <div class="contact-info rv">
         <span class="eyebrow">Начало работы</span>
         <h2>Обсудим вашу задачу на уровне первых лиц</h2>
-        <p class="desc">Первая встреча — экспертная сессия, а не презентация о нас. Вы уйдёте с предварительной картой рисков, даже если мы не начнём проект.</p>
-        <div class="c-line"><span class="k">Телефон</span><span class="v"><a href="tel:+74950000000">+7 (495) 000-00-00</a></span></div>
+        <p class="desc">Первая встреча — экспертная сессия, а не презентация о нас. Уже на ней вы получите предварительную оценку ситуации, а в течение пяти рабочих дней — карту рисков, даже если мы не начнём проект.</p>
+        <div class="c-line"><span class="k">Телефон</span><span class="v"><a href="tel:+74951472240">+7 (495) 147-22-40</a></span></div>
         <div class="c-line"><span class="k">Почта</span><span class="v"><a href="mailto:office@mera-center.ru">office@mera-center.ru</a></span></div>
         <div class="c-line"><span class="k">Адрес</span><span class="v">Москва, Пресненская наб., 12<br>башня «Федерация», 47 этаж</span></div>
         <div class="c-line"><span class="k">Режим</span><span class="v">Пн–Пт, 9:00–19:00 (МСК)</span></div>
@@ -930,7 +950,7 @@ footer{background:var(--navy-900);color:#aebcd6;padding:56px 0 34px}
       </div>
       <form class="lead rv" id="leadForm" novalidate>
         <h3>Запросить экспертную сессию</h3>
-        <p class="note">Ответим в течение одного рабочего дня. Конфиденциальность — по умолчанию, до подписания NDA.</p>
+        <p class="note">Ответим в течение одного рабочего дня. Конфиденциальность — по умолчанию.</p>
         <div class="cap"><span class="gd"></span>Берём не более шести новых проектов в квартал — чтобы держать уровень экспертизы</div>
         <div class="field"><label for="f-name">Имя и должность</label><input id="f-name" name="name" required placeholder="Иван Петров, директор по персоналу"/></div>
         <div class="field"><label for="f-org">Организация</label><input id="f-org" name="org" required placeholder="Компания или ведомство"/></div>
@@ -1011,8 +1031,16 @@ footer{background:var(--navy-900);color:#aebcd6;padding:56px 0 34px}
   });
 
   /* close mobile menu after navigation (CSS handles open/close itself) */
-  var navToggle=$('#navtoggle'),menu=$('#menu');
-  if(menu&&navToggle){menu.addEventListener('click',function(e){if(e.target.tagName==='A')navToggle.checked=false;});}
+  var navToggle=$('#navtoggle'),menu=$('#menu'),burger=$('.burger');
+  if(menu&&navToggle){
+    menu.addEventListener('click',function(e){if(e.target.tagName==='A'){navToggle.checked=false;navToggle.dispatchEvent(new Event('change'));}});
+    if(burger){
+      var syncBurger=function(){burger.setAttribute('aria-expanded',navToggle.checked?'true':'false');};
+      navToggle.addEventListener('change',syncBurger);syncBurger();
+    }
+  }
+
+  var reduceMotion=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* scroll progress bar */
   var prog=$('#progress');
@@ -1030,29 +1058,33 @@ footer{background:var(--navy-900);color:#aebcd6;padding:56px 0 34px}
     },{threshold:.12,rootMargin:'0px 0px -40px 0px'});
     $$('.rv').forEach(function(el){io.observe(el);});
 
-    /* animated counters */
-    var cio=new IntersectionObserver(function(es){
-      es.forEach(function(e){
-        if(!e.isIntersecting)return;
-        var el=e.target,target=+el.dataset.count,suffix=el.dataset.suffix||'',plus=el.dataset.plus?'+':'',dur=1300,t0=performance.now();
-        (function tick(t){
-          var p=Math.min(((t||performance.now())-t0)/dur,1),k=1-Math.pow(1-p,3);
-          el.textContent=Math.round(target*k)+plus+suffix;
-          if(p<1)requestAnimationFrame(tick);
-        })();
-        cio.unobserve(el);
-      });
-    },{threshold:.6});
-    $$('[data-count]').forEach(function(el){cio.observe(el);});
+    /* animated counters (HTML already holds final values; skip if reduced motion) */
+    if(!reduceMotion){
+      var cio=new IntersectionObserver(function(es){
+        es.forEach(function(e){
+          if(!e.isIntersecting)return;
+          var el=e.target,target=+el.dataset.count,suffix=el.dataset.suffix||'',plus=el.dataset.plus?'+':'',dur=1300,t0=performance.now();
+          (function tick(t){
+            var p=Math.min(((t||performance.now())-t0)/dur,1),k=1-Math.pow(1-p,3);
+            el.textContent=Math.round(target*k)+plus+suffix;
+            if(p<1)requestAnimationFrame(tick);
+          })();
+          cio.unobserve(el);
+        });
+      },{threshold:.6});
+      $$('[data-count]').forEach(function(el){cio.observe(el);});
+    }
 
-    /* hide floating CTA when quiz or contact is on screen */
+    /* hide floating CTA when quiz or contact is on screen.
+       Map per element: суммирующий счётчик ловил бы рассинхрон
+       на initial callback при deep-link на #quiz/#contact */
     var fab=$('.fab');
     if(fab){
-      var visible=0;
+      var fabState=new Map();
       var fio=new IntersectionObserver(function(es){
-        es.forEach(function(en){visible+=en.isIntersecting?1:-1;});
-        if(visible<0)visible=0;
-        fab.classList.toggle('hide',visible>0);
+        es.forEach(function(en){fabState.set(en.target,en.isIntersecting);});
+        var any=false;fabState.forEach(function(v){if(v)any=true;});
+        fab.classList.toggle('hide',any);
       },{threshold:.12});
       ['#quiz','#contact'].forEach(function(s){var el=$(s);if(el)fio.observe(el);});
     }
@@ -1061,7 +1093,7 @@ footer{background:var(--navy-900);color:#aebcd6;padding:56px 0 34px}
   }
 
   /* cursor spotlight on cards */
-  var fine=window.matchMedia&&matchMedia('(pointer:fine)').matches;
+  var fine=window.matchMedia&&matchMedia('(pointer:fine)').matches&&!reduceMotion;
   if(fine){
     $$('.glow').forEach(function(c){
       c.addEventListener('mousemove',function(e){
@@ -1148,6 +1180,7 @@ footer{background:var(--navy-900);color:#aebcd6;padding:56px 0 34px}
     });
     $('.q-again',app).addEventListener('click',function(){
       idx=0;score=0;
+      card.classList.remove('t-good','t-mid','t-bad');
       arc.style.strokeDashoffset=CIRC;
       result.hidden=true;stage.hidden=false;
       render();
