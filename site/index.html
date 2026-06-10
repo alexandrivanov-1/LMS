@@ -3,677 +3,663 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>МЕРА — Экспертно-аналитический центр. Аудит, стандарты, аттестация, обучение с измеримым результатом</title>
-<meta name="description" content="Экспертно-аналитический центр МЕРА: аудиты и комплаенс, разработка стандартов и аттестация, отбор преподавателей и программ, корпоративное обучение с измеримым результатом. Для крупных компаний и государственного сектора."/>
+<title>МЕРА — Экспертно-аналитический центр. Аудит, стандарты, аттестация и обучение с измеримым результатом</title>
+<meta name="description" content="Экспертно-аналитический центр МЕРА: аудиты и комплаенс, разработка стандартов и аттестация, отбор преподавателей и программ, обучение с измеримым результатом. Для крупных компаний и государственного сектора."/>
 <script>document.documentElement.className='js';</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --paper:#f6f5f0;
+  --navy-900:#071a3d;
+  --navy-800:#0b2a5e;
+  --navy-700:#103a82;
+  --blue:#1c5fd0;
+  --blue-600:#2a6fe0;
+  --blue-bright:#3a82f6;
+  --sky:#e8f0fc;
+  --sky-2:#f1f6fd;
+  --gold:#c8a44d;
+  --gold-soft:#e7d29a;
+  --ink:#0e1726;
+  --ink-2:#28344a;
+  --muted:#586377;
+  --line:#dde5f0;
+  --line-2:#eaf0f8;
+  --paper:#f3f7fc;
   --white:#ffffff;
-  --ink:#13161b;
-  --ink-2:#2b2f37;
-  --muted:#646a73;
-  --line:#e7e4da;
-  --line-2:#efede6;
-  --accent:#0d7a5f;
-  --accent-deep:#0a5c47;
-  --accent-bright:#13a17c;
-  --tint:#e9f3ee;
-  --tint-2:#f1f7f3;
-  --dark:#0e1512;
-  --dark-soft:#16201b;
-  --display:"Fraunces", Georgia, "Times New Roman", serif;
-  --sans:"Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --shadow:0 1px 2px rgba(19,22,27,.04), 0 12px 32px -12px rgba(19,22,27,.12);
-  --shadow-lg:0 2px 6px rgba(19,22,27,.05), 0 30px 60px -24px rgba(19,22,27,.22);
-  --r:18px;
+  --display:"Golos Text","Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --sans:"Inter","Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --shadow:0 1px 2px rgba(11,42,94,.05),0 14px 34px -16px rgba(11,42,94,.22);
+  --shadow-lg:0 2px 6px rgba(11,42,94,.06),0 34px 64px -28px rgba(11,42,94,.34);
+  --r:16px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-body{
-  background:var(--paper);color:var(--ink);font-family:var(--sans);
-  line-height:1.6;font-weight:400;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
-}
-::selection{background:var(--accent);color:#fff}
-:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
-.field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{outline:none}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+::selection{background:var(--blue);color:#fff}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:4px}
 a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
-.wrap{max-width:1240px;margin:0 auto;padding:0 clamp(20px,4vw,48px)}
-h1,h2,h3,.display{font-family:var(--display);font-weight:500;letter-spacing:-.015em;line-height:1.08}
-.eyebrow{
-  display:inline-flex;align-items:center;gap:10px;font-size:12.5px;font-weight:600;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--accent);
-}
-.eyebrow::before{content:"";width:26px;height:2px;background:var(--accent);border-radius:2px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 clamp(18px,4vw,48px)}
+h1,h2,h3,.display{font-family:var(--display);font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:12.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--blue)}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--blue);border-radius:2px}
+
+/* hide control checkboxes */
+.toggle{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+
+/* ---------- top utility bar ---------- */
+.utility{background:var(--navy-900);color:#cdd8ee;font-size:13px}
+.utility .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:42px}
+.utility .left{display:flex;align-items:center;gap:10px;min-width:0}
+.utility .dot{width:7px;height:7px;border-radius:50%;background:#37d27a;flex:none;box-shadow:0 0 0 3px rgba(55,210,122,.18)}
+.utility .left span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.utility .right{display:flex;align-items:center;gap:20px;flex:none}
+.utility a{color:#cdd8ee;transition:color .2s}
+.utility a:hover{color:#fff}
+.vis-btn{display:inline-flex;align-items:center;gap:8px;cursor:pointer;color:#cdd8ee;transition:color .2s}
+.vis-btn:hover{color:#fff}
+.vis-btn svg{width:16px;height:16px}
+.utility .phone{font-weight:600;color:#fff}
 
 /* ---------- header ---------- */
-header{
-  position:sticky;top:0;z-index:100;background:rgba(246,245,240,.82);
-  backdrop-filter:saturate(180%) blur(16px);border-bottom:1px solid transparent;transition:border-color .3s,background .3s;
-}
-header.scrolled{border-color:var(--line);background:rgba(246,245,240,.92)}
-.nav{display:flex;align-items:center;justify-content:space-between;height:74px;gap:24px}
-.brand{display:flex;align-items:center;gap:13px}
-.brand .glyph{
-  width:38px;height:38px;border-radius:11px;background:var(--ink);color:#fff;
-  display:flex;align-items:center;justify-content:center;font-family:var(--display);
-  font-size:21px;font-weight:600;
-}
-.brand .glyph b{color:var(--accent-bright);font-weight:600}
-.brand .txt{line-height:1.1}
-.brand .name{font-family:var(--display);font-size:20px;font-weight:600;letter-spacing:.04em}
-.brand .role{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted)}
-nav.menu{display:flex;gap:30px}
-nav.menu a{font-size:14.5px;color:var(--ink-2);font-weight:500;transition:color .2s}
-nav.menu a:hover{color:var(--accent)}
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:9px;
-  font-family:var(--sans);font-size:15px;font-weight:600;cursor:pointer;
-  padding:13px 24px;border-radius:12px;border:1px solid transparent;transition:all .25s;white-space:nowrap;
-}
+header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.9);backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:78px;gap:22px}
+.brand{display:flex;align-items:center;gap:14px}
+.emblem{position:relative;width:46px;height:46px;flex:none;border-radius:12px;background:linear-gradient(160deg,var(--navy-700),var(--navy-900));display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.emblem b{font-family:var(--display);font-size:23px;font-weight:800;color:var(--gold);line-height:1}
+.emblem::after{content:"";position:absolute;inset:4px;border:1px solid rgba(200,164,77,.4);border-radius:8px}
+.brand .txt{line-height:1.15}
+.brand .name{font-family:var(--display);font-size:21px;font-weight:800;letter-spacing:.02em;color:var(--ink)}
+.brand .role{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+nav.menu{display:flex;gap:28px}
+nav.menu a{font-size:15px;color:var(--ink-2);font-weight:500;transition:color .2s}
+nav.menu a:hover{color:var(--blue)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;font-family:var(--sans);font-weight:600;cursor:pointer;border:1px solid transparent;border-radius:10px;transition:all .22s;white-space:nowrap;font-size:15px;padding:13px 22px}
 .btn svg{width:16px;height:16px}
-.btn-primary{background:var(--accent);color:#fff}
-.btn-primary:hover{background:var(--accent-deep);transform:translateY(-1px);box-shadow:0 10px 24px -10px rgba(13,122,95,.6)}
-.btn-dark{background:var(--ink);color:#fff}
-.btn-dark:hover{background:#000;transform:translateY(-1px)}
-.btn-ghost{background:transparent;border-color:var(--line);color:var(--ink)}
-.btn-ghost:hover{border-color:var(--ink);background:var(--white)}
-.btn-lg{padding:16px 30px;font-size:16px;border-radius:14px}
-.nav .btn-sm{padding:11px 20px;font-size:14px}
-.burger{display:none;width:42px;height:42px;border:1px solid var(--line);border-radius:11px;background:var(--white);cursor:pointer;align-items:center;justify-content:center}
-.burger span{display:block;width:18px;height:2px;background:var(--ink);position:relative}
-.burger span::before,.burger span::after{content:"";position:absolute;left:0;width:18px;height:2px;background:var(--ink)}
-.burger span::before{top:-6px}.burger span::after{top:6px}
+.btn-primary{background:var(--blue);color:#fff}
+.btn-primary:hover{background:var(--navy-700);transform:translateY(-1px);box-shadow:0 12px 26px -12px rgba(28,95,208,.7)}
+.btn-ghost{background:var(--white);border-color:var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--blue);color:var(--blue)}
+.btn-lg{font-size:16px;padding:16px 28px;border-radius:12px}
+.nav .btn-sm{padding:11px 18px;font-size:14px}
+.burger{display:none;width:46px;height:46px;border:1px solid var(--line);border-radius:11px;background:var(--white);cursor:pointer;align-items:center;justify-content:center}
+.burger span,.burger span::before,.burger span::after{content:"";display:block;width:18px;height:2px;background:var(--ink);border-radius:2px;transition:.25s}
+.burger span{position:relative}
+.burger span::before{position:absolute;top:-6px}
+.burger span::after{position:absolute;top:6px}
+#navtoggle:checked ~ .site .burger span{background:transparent}
+#navtoggle:checked ~ .site .burger span::before{top:0;transform:rotate(45deg)}
+#navtoggle:checked ~ .site .burger span::after{top:0;transform:rotate(-45deg)}
 
 /* ---------- hero ---------- */
-.hero{position:relative;overflow:hidden;padding:clamp(56px,8vw,104px) 0 clamp(48px,6vw,80px)}
-.hero::before{
-  content:"";position:absolute;top:-220px;right:-160px;width:680px;height:680px;border-radius:50%;
-  background:radial-gradient(circle at 50% 50%, rgba(19,161,124,.16), rgba(19,161,124,0) 62%);
-  filter:blur(8px);pointer-events:none;
-}
-.hero::after{
-  content:"";position:absolute;bottom:-260px;left:-180px;width:560px;height:560px;border-radius:50%;
-  background:radial-gradient(circle at 50% 50%, rgba(13,122,95,.10), rgba(13,122,95,0) 60%);pointer-events:none;
-}
-.hero .wrap{position:relative;z-index:2}
-.hero .eyebrow{margin-bottom:26px}
-.hero h1{font-size:clamp(40px,6.4vw,82px);max-width:16ch;margin-bottom:26px}
-.hero h1 .accent{color:var(--accent);font-style:italic}
-.hero .lead{font-size:clamp(17px,1.55vw,20px);color:var(--muted);max-width:54ch;margin-bottom:38px}
-.hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:clamp(48px,6vw,84px)}
-.hero-stats{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,2.5vw,40px);
-  padding-top:clamp(36px,4vw,52px);border-top:1px solid var(--line);
-}
-.hstat .num{font-family:var(--display);font-size:clamp(34px,4vw,52px);font-weight:500;line-height:1;color:var(--ink)}
-.hstat .num small{color:var(--accent);font-size:.6em}
-.hstat .lbl{margin-top:10px;font-size:13.5px;color:var(--muted);line-height:1.4}
+.hero{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--white),var(--paper))}
+.hero::before{content:"";position:absolute;top:-200px;right:-140px;width:620px;height:620px;border-radius:50%;background:radial-gradient(circle,rgba(58,130,246,.14),transparent 62%)}
+.hero::after{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:64px 64px;opacity:.5;mask-image:radial-gradient(680px 440px at 78% 24%,#000,transparent 72%)}
+.hero .wrap{position:relative;z-index:2;padding:clamp(52px,7vw,96px) 0 clamp(46px,6vw,78px)}
+.hero .eyebrow{margin-bottom:24px}
+.hero h1{font-size:clamp(38px,6vw,78px);max-width:17ch;margin-bottom:24px;color:var(--ink)}
+.hero h1 .accent{color:var(--blue)}
+.hero .lead{font-size:clamp(17px,1.55vw,20px);color:var(--muted);max-width:56ch;margin-bottom:36px}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:clamp(44px,6vw,76px)}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(14px,2.4vw,36px);padding-top:clamp(34px,4vw,48px);border-top:1px solid var(--line)}
+.hstat .num{font-family:var(--display);font-size:clamp(32px,4vw,50px);font-weight:800;line-height:1;color:var(--navy-800)}
+.hstat .num small{color:var(--blue);font-size:.62em;font-weight:700}
+.hstat .lbl{margin-top:9px;font-size:13.5px;color:var(--muted);line-height:1.4}
 
-/* ---------- marquee / trust ---------- */
-.trust{padding:30px 0;border-block:1px solid var(--line);background:var(--white)}
-.trust .row{display:flex;align-items:center;gap:clamp(22px,4vw,56px);flex-wrap:wrap;justify-content:center}
-.trust .label{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:600}
-.trust .item{font-family:var(--display);font-size:16px;font-weight:600;letter-spacing:.02em;color:#6a6f6a}
+/* ---------- credentials strip ---------- */
+.creds{background:var(--navy-800);color:#fff}
+.creds .wrap{display:flex;align-items:stretch;gap:0;flex-wrap:wrap}
+.cred{flex:1;min-width:200px;padding:24px clamp(18px,2vw,30px);display:flex;align-items:center;gap:14px;border-left:1px solid rgba(255,255,255,.1)}
+.cred:first-child{border-left:none}
+.cred .ic{width:38px;height:38px;flex:none;border-radius:9px;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;color:var(--gold-soft)}
+.cred .ic svg{width:20px;height:20px}
+.cred .t{font-size:14px;line-height:1.35}
+.cred .t b{display:block;font-family:var(--display);font-weight:600;font-size:14.5px;margin-bottom:2px;color:#fff}
+.cred .t span{color:#aebcd6;font-size:12.5px}
 
 /* ---------- sections ---------- */
-section{padding:clamp(72px,8vw,128px) 0}
-.sec-head{max-width:780px;margin-bottom:clamp(44px,5vw,72px)}
-.sec-head.center{margin-inline:auto;text-align:center}
-.sec-head.center .eyebrow{justify-content:center}
-.sec-head h2{font-size:clamp(30px,4.2vw,52px);margin:20px 0 18px}
-.sec-head p{font-size:18px;color:var(--muted);max-width:62ch}
-.sec-head.center p{margin-inline:auto}
+section{padding:clamp(68px,8vw,124px) 0}
 .bg-white{background:var(--white)}
+.bg-sky{background:var(--sky-2)}
+.sec-head{max-width:800px;margin-bottom:clamp(40px,5vw,68px)}
+.sec-head h2{font-size:clamp(29px,4vw,50px);margin:18px 0 16px;color:var(--ink)}
+.sec-head p{font-size:18px;color:var(--muted);max-width:64ch}
 
 /* ---------- services contour ---------- */
-.contour{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
-.stage{
-  background:var(--white);border:1px solid var(--line);border-radius:var(--r);
-  padding:clamp(28px,3vw,40px);box-shadow:var(--shadow);transition:transform .3s,box-shadow .3s,border-color .3s;
-  position:relative;overflow:hidden;
-}
-.stage:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:#d8d4c8}
-.stage .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
-.stage .num{font-family:var(--display);font-size:15px;font-weight:600;color:var(--accent);letter-spacing:.04em}
-.stage .ico{
-  width:48px;height:48px;border-radius:13px;background:var(--tint);color:var(--accent-deep);
-  display:flex;align-items:center;justify-content:center;
-}
-.stage .ico svg{width:24px;height:24px;stroke-width:1.6}
-.stage h3{font-size:clamp(22px,2.2vw,28px);margin-bottom:12px}
-.stage .desc{color:var(--muted);font-size:15.5px;margin-bottom:22px}
-.stage ul{list-style:none;display:flex;flex-direction:column;gap:1px}
-.stage li{font-size:14.8px;color:var(--ink-2);padding:11px 0 11px 26px;position:relative;border-top:1px solid var(--line-2)}
-.stage li::before{
-  content:"";position:absolute;left:2px;top:18px;width:10px;height:10px;border-radius:50%;
-  background:var(--tint);border:2px solid var(--accent);
-}
-.loop{
-  grid-column:1/-1;display:flex;align-items:center;gap:22px;flex-wrap:wrap;
-  background:var(--ink);color:#fff;border-radius:var(--r);padding:clamp(26px,3vw,38px);
-}
-.loop .sym{
-  width:58px;height:58px;flex:none;border-radius:50%;border:2px solid var(--accent-bright);
-  display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--accent-bright);
-}
-.loop p{font-size:16px;color:rgba(255,255,255,.78);max-width:80ch}
+.contour{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.stage{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:clamp(26px,3vw,38px);box-shadow:var(--shadow);transition:transform .3s,box-shadow .3s,border-color .3s;position:relative}
+.stage::before{content:"";position:absolute;left:0;top:24px;bottom:24px;width:3px;border-radius:3px;background:var(--blue);opacity:0;transition:opacity .3s}
+.stage:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:#c9d6ea}
+.stage:hover::before{opacity:1}
+.stage .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.stage .num{font-family:var(--display);font-size:14px;font-weight:700;color:var(--blue);letter-spacing:.05em}
+.stage .ico{width:50px;height:50px;border-radius:13px;background:var(--sky);color:var(--blue);display:flex;align-items:center;justify-content:center}
+.stage .ico svg{width:25px;height:25px;stroke-width:1.7}
+.stage h3{font-size:clamp(21px,2.2vw,27px);margin-bottom:11px;color:var(--ink)}
+.stage .desc{color:var(--muted);font-size:15.5px;margin-bottom:20px}
+.stage ul{list-style:none}
+.stage li{font-size:14.8px;color:var(--ink-2);padding:11px 0 11px 28px;position:relative;border-top:1px solid var(--line-2)}
+.stage li::before{content:"";position:absolute;left:3px;top:17px;width:9px;height:9px;border-radius:2px;background:var(--sky);border:2px solid var(--blue)}
+.loop{grid-column:1/-1;display:flex;align-items:center;gap:22px;flex-wrap:wrap;background:linear-gradient(135deg,var(--navy-800),var(--navy-900));color:#fff;border-radius:var(--r);padding:clamp(26px,3vw,38px)}
+.loop .sym{width:58px;height:58px;flex:none;border-radius:50%;border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:26px;color:var(--gold-soft)}
+.loop p{font-size:16px;color:#c6d2e8;max-width:82ch}
 .loop strong{color:#fff;font-weight:600}
 
 /* ---------- method ---------- */
-.method{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(36px,5vw,84px);align-items:start}
-.method .statement{font-family:var(--display);font-size:clamp(24px,2.7vw,36px);font-weight:400;line-height:1.32;color:var(--ink)}
-.method .statement em{color:var(--accent);font-style:italic}
-.m-list{display:grid;gap:14px}
-.m-item{display:grid;grid-template-columns:52px 1fr;gap:18px;background:var(--white);border:1px solid var(--line);border-radius:14px;padding:22px 24px;transition:border-color .25s,box-shadow .25s}
-.m-item:hover{border-color:#d8d4c8;box-shadow:var(--shadow)}
-.m-item .no{font-family:var(--display);font-size:22px;font-weight:600;color:var(--accent)}
-.m-item h4{font-size:17px;font-weight:600;margin-bottom:6px}
+.method{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(34px,5vw,80px);align-items:start}
+.method .statement{font-family:var(--display);font-size:clamp(23px,2.6vw,34px);font-weight:500;line-height:1.34;color:var(--ink);letter-spacing:-.01em}
+.method .statement em{color:var(--blue);font-style:normal;font-weight:700}
+.m-list{display:grid;gap:12px}
+.m-item{display:grid;grid-template-columns:54px 1fr;gap:18px;background:var(--white);border:1px solid var(--line);border-radius:13px;padding:22px 24px;transition:border-color .25s,box-shadow .25s}
+.m-item:hover{border-color:#c9d6ea;box-shadow:var(--shadow)}
+.m-item .no{font-family:var(--display);font-size:15px;font-weight:700;color:#fff;background:var(--blue);width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center}
+.m-item h4{font-size:17px;font-weight:600;margin-bottom:5px}
 .m-item p{font-size:14.6px;color:var(--muted)}
 
 /* ---------- audience ---------- */
-.aud-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.aud{border-radius:var(--r);padding:clamp(30px,3.4vw,48px);border:1px solid var(--line);box-shadow:var(--shadow)}
+.aud-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.aud{border-radius:var(--r);padding:clamp(28px,3.4vw,46px);border:1px solid var(--line);box-shadow:var(--shadow)}
 .aud.corp{background:var(--white)}
-.aud.gov{background:linear-gradient(160deg,var(--tint-2),var(--white))}
-.aud .tag{display:inline-block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--accent);background:var(--tint);padding:7px 14px;border-radius:999px;margin-bottom:20px}
-.aud h3{font-size:clamp(23px,2.4vw,30px);margin-bottom:14px}
-.aud .desc{color:var(--muted);font-size:16px;margin-bottom:24px}
-.aud ul{list-style:none;display:grid;gap:1px}
+.aud.gov{background:linear-gradient(160deg,var(--sky),var(--white));border-color:#c9d6ea}
+.aud .tag{display:inline-block;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--blue);background:var(--sky);padding:7px 14px;border-radius:8px;margin-bottom:18px}
+.aud.gov .tag{background:#fff}
+.aud h3{font-size:clamp(22px,2.4vw,30px);margin-bottom:12px;color:var(--ink)}
+.aud .desc{color:var(--muted);font-size:16px;margin-bottom:22px}
+.aud ul{list-style:none}
 .aud li{font-size:15px;color:var(--ink-2);padding:13px 0 13px 30px;position:relative;border-top:1px solid var(--line-2)}
-.aud li::before{content:"";position:absolute;left:0;top:18px;width:14px;height:9px;border-left:2px solid var(--accent);border-bottom:2px solid var(--accent);transform:rotate(-45deg)}
+.aud li::before{content:"";position:absolute;left:1px;top:17px;width:13px;height:8px;border-left:2px solid var(--blue);border-bottom:2px solid var(--blue);transform:rotate(-45deg)}
 
 /* ---------- cases ---------- */
-.case-row{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.case{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:clamp(26px,2.8vw,38px);display:flex;flex-direction:column;box-shadow:var(--shadow);transition:transform .3s,box-shadow .3s}
+.case-row{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.case{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:clamp(26px,2.8vw,36px);display:flex;flex-direction:column;box-shadow:var(--shadow);transition:transform .3s,box-shadow .3s}
 .case:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
-.case .sector{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--accent);margin-bottom:18px}
-.case h3{font-size:18.5px;font-weight:500;line-height:1.42;flex:1;margin-bottom:26px;font-family:var(--sans)}
-.case .metric{border-top:1px solid var(--line);padding-top:22px}
-.case .metric .num{font-family:var(--display);font-size:clamp(36px,3.6vw,46px);font-weight:600;color:var(--accent);line-height:1}
-.case .metric .what{font-size:14px;color:var(--muted);margin-top:8px}
+.case .sector{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--blue);margin-bottom:16px}
+.case h3{font-size:18px;font-weight:500;line-height:1.44;flex:1;margin-bottom:24px;font-family:var(--sans);color:var(--ink)}
+.case .metric{border-top:1px solid var(--line);padding-top:20px}
+.case .metric .num{font-family:var(--display);font-size:clamp(34px,3.6vw,44px);font-weight:800;color:var(--navy-800);line-height:1}
+.case .metric .what{font-size:14px;color:var(--muted);margin-top:7px}
 
 /* ---------- process ---------- */
-.proc{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(14px,1.6vw,24px)}
-.p-step{position:relative;padding-top:30px}
+.proc{display:grid;grid-template-columns:repeat(5,1fr);gap:clamp(12px,1.5vw,22px)}
+.p-step{position:relative;padding-top:28px}
 .p-step .bar{position:absolute;top:0;left:0;right:0;height:3px;border-radius:3px;background:var(--line)}
-.p-step:first-child .bar{background:var(--accent)}
-.p-step .n{font-family:var(--display);font-size:14px;font-weight:600;color:var(--accent);letter-spacing:.1em}
-.p-step h4{font-size:17px;font-weight:600;margin:12px 0 10px}
+.p-step:first-child .bar{background:var(--blue)}
+.p-step .n{font-family:var(--display);font-size:14px;font-weight:700;color:var(--blue)}
+.p-step h4{font-size:17px;font-weight:600;margin:11px 0 9px}
 .p-step p{font-size:14px;color:var(--muted)}
 
 /* ---------- experts ---------- */
-.exp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.expert{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:clamp(28px,3vw,38px);box-shadow:var(--shadow);transition:transform .3s,box-shadow .3s}
+.exp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.expert{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:clamp(26px,3vw,36px);box-shadow:var(--shadow);transition:transform .3s,box-shadow .3s}
 .expert:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
-.expert .ava{width:64px;height:64px;border-radius:50%;background:var(--ink);color:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:22px;font-weight:600;margin-bottom:22px}
-.expert h4{font-family:var(--display);font-size:21px;font-weight:600;margin-bottom:6px}
-.expert .role{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:16px}
+.expert .ava{width:62px;height:62px;border-radius:13px;background:linear-gradient(160deg,var(--navy-700),var(--navy-900));color:var(--gold-soft);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:21px;font-weight:700;margin-bottom:20px}
+.expert h4{font-family:var(--display);font-size:20px;font-weight:700;margin-bottom:5px}
+.expert .role{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);font-weight:600;margin-bottom:15px}
 .expert p{font-size:14.5px;color:var(--muted)}
 
-/* ---------- dark CTA band ---------- */
-.band{background:var(--dark);color:#fff;border-radius:0;position:relative;overflow:hidden}
-.band::before{content:"";position:absolute;top:-160px;right:-120px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(19,161,124,.22),transparent 62%)}
+/* ---------- navy band ---------- */
+.band{background:linear-gradient(135deg,var(--navy-800),var(--navy-900));color:#fff;position:relative;overflow:hidden}
+.band::before{content:"";position:absolute;top:-160px;right:-120px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(58,130,246,.26),transparent 62%)}
+.band::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(600px 400px at 30% 50%,#000,transparent 75%)}
 .band .wrap{position:relative;z-index:2;text-align:center}
-.band blockquote{font-family:var(--display);font-size:clamp(26px,3.6vw,46px);font-weight:400;line-height:1.3;max-width:22ch;margin:0 auto 22px}
-.band blockquote em{color:var(--accent-bright);font-style:italic}
-.band .who{font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:38px}
-.band .btn-primary{background:var(--accent-bright);color:var(--dark)}
-.band .btn-primary:hover{background:#fff;color:var(--dark)}
+.band blockquote{font-family:var(--display);font-size:clamp(25px,3.6vw,44px);font-weight:600;line-height:1.3;max-width:24ch;margin:0 auto 20px;letter-spacing:-.01em}
+.band blockquote em{color:var(--gold-soft);font-style:normal}
+.band .who{font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#9fb0cf;margin-bottom:36px}
+.band .btn-primary{background:#fff;color:var(--navy-800)}
+.band .btn-primary:hover{background:var(--gold-soft);color:var(--navy-900)}
 
 /* ---------- contact ---------- */
-.contact{display:grid;grid-template-columns:1fr 1fr;gap:clamp(36px,5vw,80px);align-items:start}
-.contact-info h2{font-size:clamp(30px,3.8vw,48px);margin-bottom:20px}
-.contact-info h2.mt{margin-top:18px}
-.contact-info .desc{font-size:17px;color:var(--muted);max-width:44ch;margin-bottom:36px}
-.c-line{display:flex;gap:16px;padding:18px 0;border-top:1px solid var(--line);align-items:flex-start}
+.contact{display:grid;grid-template-columns:1fr 1fr;gap:clamp(34px,5vw,76px);align-items:start}
+.contact-info h2{font-size:clamp(29px,3.8vw,46px);margin:16px 0 18px;color:var(--ink)}
+.contact-info .desc{font-size:17px;color:var(--muted);max-width:44ch;margin-bottom:32px}
+.c-line{display:flex;gap:16px;padding:17px 0;border-top:1px solid var(--line);align-items:flex-start}
 .c-line:last-child{border-bottom:1px solid var(--line)}
-.c-line .k{width:96px;flex:none;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600;padding-top:3px}
+.c-line .k{width:96px;flex:none;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;padding-top:3px}
 .c-line .v{font-size:16px}
-.c-line a:hover{color:var(--accent)}
-form.lead{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:clamp(28px,3.2vw,44px);box-shadow:var(--shadow-lg)}
-.lead h3{font-size:24px;margin-bottom:8px}
-.lead .note{font-size:14px;color:var(--muted);margin-bottom:28px}
-.field{margin-bottom:18px}
-.field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-2);margin-bottom:8px}
-.field input,.field select,.field textarea{
-  width:100%;font-family:var(--sans);font-size:15.5px;color:var(--ink);background:var(--paper);
-  border:1px solid var(--line);border-radius:11px;padding:13px 15px;transition:border-color .2s,background .2s;outline:none;
-}
-.field input::placeholder,.field textarea::placeholder{color:#8b897f}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--accent);background:var(--white)}
-.field textarea{min-height:96px;resize:vertical}
+.c-line a:hover{color:var(--blue)}
+form.lead{background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:clamp(26px,3.2vw,42px);box-shadow:var(--shadow-lg)}
+.lead h3{font-size:24px;margin-bottom:7px;color:var(--ink)}
+.lead .note{font-size:14px;color:var(--muted);margin-bottom:26px}
+.field{margin-bottom:17px}
+.field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink-2);margin-bottom:7px}
+.field input,.field select,.field textarea{width:100%;font-family:var(--sans);font-size:15.5px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:13px 15px;transition:border-color .2s,background .2s;outline:none}
+.field input::placeholder,.field textarea::placeholder{color:#8893a6}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--blue);background:var(--white)}
+.field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{outline:none}
+.field textarea{min-height:94px;resize:vertical}
 .lead .btn{width:100%}
 .form-foot{font-size:12.5px;color:var(--muted);text-align:center;margin-top:14px}
-.form-ok{display:none;margin-top:16px;padding:16px;border-radius:12px;background:var(--tint);color:var(--accent-deep);font-size:14.5px;font-weight:500;text-align:center}
+.form-ok{display:none;margin-top:16px;padding:16px;border-radius:11px;background:var(--sky);color:var(--navy-700);font-size:14.5px;font-weight:500;text-align:center}
 
 /* ---------- footer ---------- */
-footer{background:var(--white);border-top:1px solid var(--line);padding:56px 0 36px}
-.foot{display:flex;justify-content:space-between;gap:32px;flex-wrap:wrap}
-.foot .brand{align-items:flex-start}
-.foot .tagline{font-size:14px;color:var(--muted);max-width:42ch;margin-top:14px}
-.foot nav{display:flex;gap:26px;flex-wrap:wrap;align-content:flex-start}
-.foot nav a{font-size:14px;color:var(--ink-2);font-weight:500}
-.foot nav a:hover{color:var(--accent)}
-.foot-bottom{margin-top:42px;padding-top:24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--muted)}
+footer{background:var(--navy-900);color:#aebcd6;padding:56px 0 34px}
+.foot{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px}
+.foot .brand .name{color:#fff}
+.foot .brand .role{color:#8da0c2}
+.foot .tagline{font-size:14px;color:#8da0c2;max-width:38ch;margin-top:16px}
+.foot h5{font-family:var(--display);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#fff;margin-bottom:16px;font-weight:600}
+.foot ul{list-style:none;display:grid;gap:11px}
+.foot ul a,.foot ul li{font-size:14.5px;color:#aebcd6}
+.foot ul a:hover{color:#fff}
+.foot-bottom{margin-top:42px;padding-top:22px;border-top:1px solid rgba(255,255,255,.1);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px;color:#7d8eae}
 
-/* ---------- reveal: ENHANCEMENT ONLY (visible without JS) ---------- */
-.js .rv{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}
+/* ---------- reveal (enhancement only; visible without JS) ---------- */
+.js .rv{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
 .js .rv.in{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){
-  .js .rv{opacity:1!important;transform:none!important}
-  html{scroll-behavior:auto}
-}
+@media(prefers-reduced-motion:reduce){.js .rv{opacity:1!important;transform:none!important}html{scroll-behavior:auto}}
+
+/* ---------- accessibility "version for visually impaired" (CSS-only) ---------- */
+#a11y:checked ~ .site{font-size:120%;background:#fff;filter:saturate(.2) contrast(1.06)}
+#a11y:checked ~ .site .hero::before,#a11y:checked ~ .site .hero::after,#a11y:checked ~ .site .band::before,#a11y:checked ~ .site .band::after,#a11y:checked ~ .site .stage::before{display:none}
+#a11y:checked ~ .site *{box-shadow:none!important;text-shadow:none!important}
+#a11y:checked ~ .site nav.menu a,#a11y:checked ~ .site .stage li,#a11y:checked ~ .site .aud li,#a11y:checked ~ .site .c-line a{text-decoration:underline}
+#a11y:checked ~ .site .muted,#a11y:checked ~ .site .sec-head p,#a11y:checked ~ .site .lead,#a11y:checked ~ .site .stage .desc,#a11y:checked ~ .site .case h3,#a11y:checked ~ .site .m-item p,#a11y:checked ~ .site .hstat .lbl{color:#1a1a1a}
+.vis-btn .on{display:none}
+#a11y:checked ~ .site .vis-btn .off{display:none}
+#a11y:checked ~ .site .vis-btn .on{display:inline}
 
 /* ---------- responsive ---------- */
 @media(max-width:980px){
   .contour,.aud-grid,.case-row,.exp-grid,.method,.contact{grid-template-columns:1fr}
-  .hero-stats{grid-template-columns:repeat(2,1fr);gap:28px}
-  .proc{grid-template-columns:repeat(2,1fr);gap:30px 20px}
+  .hero-stats{grid-template-columns:repeat(2,1fr);gap:26px}
+  .proc{grid-template-columns:repeat(2,1fr);gap:28px 18px}
+  .foot{grid-template-columns:1fr 1fr;gap:28px}
 }
-@media(max-width:720px){
-  nav.menu{position:fixed;inset:74px 0 auto 0;flex-direction:column;gap:0;background:var(--white);border-bottom:1px solid var(--line);padding:8px 0;display:none;box-shadow:var(--shadow-lg)}
-  nav.menu.open{display:flex}
-  nav.menu a{padding:15px clamp(20px,4vw,48px)}
+@media(max-width:880px){
+  nav.menu{display:none;position:fixed;inset:120px 0 auto 0;flex-direction:column;gap:0;background:var(--white);border-bottom:1px solid var(--line);box-shadow:var(--shadow-lg);padding:8px 0;z-index:99}
+  #navtoggle:checked ~ .site nav.menu{display:flex}
+  nav.menu a{padding:15px clamp(18px,4vw,48px)}
   .nav .btn-sm{display:none}
   .burger{display:flex}
+}
+@media(max-width:720px){
+  .utility .left span{display:none}
   .proc{grid-template-columns:1fr}
+  .foot{grid-template-columns:1fr}
+  .band blockquote{max-width:none}
 }
 </style>
 </head>
 <body id="top">
 
-<header id="hdr">
-  <div class="wrap nav">
-    <a class="brand" href="#top" aria-label="МЕРА">
-      <span class="glyph">М<b>Р</b></span>
-      <span class="txt">
-        <span class="name">МЕРА</span>
-        <span class="role">Экспертно-аналитический центр</span>
-      </span>
-    </a>
-    <nav class="menu" id="menu">
-      <a href="#services">Услуги</a>
-      <a href="#method">Методология</a>
-      <a href="#audience">Для кого</a>
-      <a href="#cases">Результаты</a>
-      <a href="#experts">Эксперты</a>
-    </nav>
-    <a class="btn btn-primary btn-sm" href="#contact">Обсудить задачу</a>
-    <button class="burger" id="burger" aria-label="Меню" aria-expanded="false" aria-controls="menu"><span></span></button>
-  </div>
-</header>
+<input type="checkbox" id="a11y" class="toggle" aria-hidden="true">
+<input type="checkbox" id="navtoggle" class="toggle" aria-hidden="true">
 
-<!-- HERO -->
-<section class="hero">
-  <div class="wrap">
-    <span class="eyebrow rv">Экспертиза · Стандарты · Развитие людей</span>
-    <h1 class="rv">Мы измеряем то,<br>что другие <span class="accent">обещают</span></h1>
-    <p class="lead rv">
-      Экспертно-аналитический центр для крупных компаний и государственного сектора.
-      Проводим аудиты и комплаенс, разрабатываем стандарты и системы аттестации,
-      отбираем преподавателей и программы, обучаем — и подтверждаем результат цифрами.
-    </p>
-    <div class="hero-actions rv">
-      <a class="btn btn-primary btn-lg" href="#contact">
-        Запросить экспертизу
-        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-      </a>
-      <a class="btn btn-ghost btn-lg" href="#services">Контур услуг</a>
-    </div>
-    <div class="hero-stats rv">
-      <div class="hstat"><div class="num" data-count="17">17</div><div class="lbl">лет отраслевой экспертизы</div></div>
-      <div class="hstat"><div class="num" data-count="240" data-plus="1">240+</div><div class="lbl">проведённых аудитов</div></div>
-      <div class="hstat"><div class="num" data-count="38">38</div><div class="lbl">разработанных стандартов</div></div>
-      <div class="hstat"><div class="num" data-count="92" data-suffix="%">92%</div><div class="lbl">клиентов возвращаются</div></div>
-    </div>
-  </div>
-</section>
+<div class="site">
 
-<!-- TRUST -->
-<div class="trust">
-  <div class="wrap row rv">
-    <span class="label">Работаем с</span>
-    <span class="item">Госкорпорации</span>
-    <span class="item">Федеральные ведомства</span>
-    <span class="item">Банковский сектор</span>
-    <span class="item">Промышленные холдинги</span>
-    <span class="item">Энергетика</span>
-  </div>
-</div>
-
-<!-- SERVICES -->
-<section id="services">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <span class="eyebrow">Контур услуг</span>
-      <h2>Замкнутый цикл — от диагностики до подтверждённого результата</h2>
-      <p>Мы не продаём разрозненные услуги. Каждый этап опирается на данные предыдущего:
-      аудит находит разрывы, стандарты их закрывают, аттестация фиксирует планку,
-      обучение доводит людей до неё — и всё это измеряется.</p>
-    </div>
-    <div class="contour">
-      <div class="stage rv">
-        <div class="top">
-          <span class="num">01 — Диагностика</span>
-          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span>
-        </div>
-        <h3>Аудиты и комплаенс</h3>
-        <p class="desc">Независимая оценка процессов, компетенций и соответствия регуляторным требованиям. Выявляем реальные, а не декларируемые разрывы.</p>
-        <ul>
-          <li>Комплаенс-аудит по отраслевым и федеральным требованиям</li>
-          <li>Аудит системы обучения и развития персонала</li>
-          <li>Оценка компетенций ключевых ролей</li>
-          <li>Карта рисков и план устранения разрывов</li>
-        </ul>
+  <!-- UTILITY BAR -->
+  <div class="utility">
+    <div class="wrap">
+      <div class="left">
+        <span class="dot"></span>
+        <span>Официальный сайт · Экспертно-аналитический центр «МЕРА»</span>
       </div>
-      <div class="stage rv">
-        <div class="top">
-          <span class="num">02 — Норматив</span>
-          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span>
-        </div>
-        <h3>Стандарты и аттестация</h3>
-        <p class="desc">Переводим выводы аудита в работающие нормативы: профессиональные стандарты, модели компетенций и систему независимой аттестации.</p>
-        <ul>
-          <li>Разработка корпоративных и отраслевых стандартов</li>
-          <li>Модели компетенций и профили должностей</li>
-          <li>Система аттестации и сертификации специалистов</li>
-          <li>Регламенты, методики и оценочные средства</li>
-        </ul>
-      </div>
-      <div class="stage rv">
-        <div class="top">
-          <span class="num">03 — Отбор</span>
-          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg></span>
-        </div>
-        <h3>Преподаватели и программы</h3>
-        <p class="desc">Отбираем и аттестуем преподавателей, проводим экспертизу программ — учат только те, кто подтвердил квалификацию по нашим стандартам.</p>
-        <ul>
-          <li>Отбор и аттестация преподавателей и тренеров</li>
-          <li>Экспертиза и сертификация учебных программ</li>
-          <li>Реестр аккредитованных провайдеров обучения</li>
-          <li>Методический контроль качества преподавания</li>
-        </ul>
-      </div>
-      <div class="stage rv">
-        <div class="top">
-          <span class="num">04 — Результат</span>
-          <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></span>
-        </div>
-        <h3>Обучение с измерением эффекта</h3>
-        <p class="desc">Проводим обучение по аттестованным программам и доказываем эффект: замер «до и после», влияние на бизнес-показатели, отчёт для руководства.</p>
-        <ul>
-          <li>Корпоративные программы обучения и развития</li>
-          <li>Входной и выходной замер компетенций</li>
-          <li>Оценка влияния на операционные показатели</li>
-          <li>Аналитический отчёт и план следующего цикла</li>
-        </ul>
-      </div>
-      <div class="loop rv">
-        <span class="sym">∞</span>
-        <p><strong>Контур замыкается.</strong> Результаты обучения становятся входными данными следующего аудита. Система не деградирует со временем — она накапливает данные и поднимает планку с каждым циклом.</p>
+      <div class="right">
+        <label class="vis-btn" for="a11y" role="button" tabindex="0" title="Версия для слабовидящих">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+          <span class="off">Версия для слабовидящих</span>
+          <span class="on">Обычная версия</span>
+        </label>
+        <a class="phone" href="tel:+74950000000">+7 (495) 000-00-00</a>
       </div>
     </div>
   </div>
-</section>
 
-<!-- METHOD -->
-<section class="bg-white" id="method">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <span class="eyebrow">Методология</span>
-      <h2>Почему нашим цифрам верят советы директоров</h2>
-    </div>
-    <div class="method">
-      <p class="statement rv">
-        Любой вывод нашего центра можно проверить: за каждой оценкой стоит методика,
-        за методикой — данные, за данными — <em>воспроизводимый замер</em>.
-        Мы не выносим суждений, которые не можем защитить перед регулятором или акционером.
-      </p>
-      <div class="m-list">
-        <div class="m-item rv"><span class="no">01</span><div><h4>Независимость оценки</h4><p>Аудиторы не участвуют в обучении тех, кого оценивали. Конфликт интересов исключён регламентом.</p></div></div>
-        <div class="m-item rv"><span class="no">02</span><div><h4>Измеримость на каждом этапе</h4><p>Каждый этап завершается числом: индекс соответствия, балл аттестации, дельта компетенций.</p></div></div>
-        <div class="m-item rv"><span class="no">03</span><div><h4>Прослеживаемость до источника</h4><p>Любая оценка прослеживается до конкретного норматива, протокола или замера. Полный аудиторский след по запросу.</p></div></div>
-        <div class="m-item rv"><span class="no">04</span><div><h4>Конфиденциальность уровня госсектора</h4><p>Работаем с чувствительными данными по закрытым контурам, NDA и требованиям к защите информации.</p></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- AUDIENCE -->
-<section id="audience">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <span class="eyebrow">Для кого</span>
-      <h2>Два мира — одна планка требований</h2>
-    </div>
-    <div class="aud-grid">
-      <div class="aud corp rv">
-        <span class="tag">Крупный бизнес</span>
-        <h3>Корпорации и холдинги</h3>
-        <p class="desc">Когда цена ошибки персонала измеряется миллиардами, обучение перестаёт быть HR-функцией и становится управлением рисками.</p>
-        <ul>
-          <li>Единые стандарты компетенций для всех «дочек» и филиалов</li>
-          <li>Независимая аттестация ключевых и критических ролей</li>
-          <li>Защита инвестиций в обучение цифрами для совета директоров</li>
-          <li>Снижение регуляторных и операционных рисков</li>
-        </ul>
-      </div>
-      <div class="aud gov rv">
-        <span class="tag">Государственный сектор</span>
-        <h3>Ведомства и госкомпании</h3>
-        <p class="desc">Понимаем специфику: 44-ФЗ и 223-ФЗ, ведомственные регламенты, профстандарты, требования к подтверждению квалификации.</p>
-        <ul>
-          <li>Соответствие федеральным и ведомственным требованиям</li>
-          <li>Методики, выдерживающие проверку контрольных органов</li>
-          <li>Аттестация по профстандартам с документальным следом</li>
-          <li>Отчётность в форматах, принятых в госуправлении</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CASES -->
-<section class="bg-white" id="cases">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <span class="eyebrow">Результаты</span>
-      <h2>Эффект, который видно в отчётности, а не в отзывах</h2>
-      <p>Имена клиентов раскрываем только по согласованию — таковы условия наших NDA. Цифры ниже подтверждены актами сдачи-приёмки.</p>
-    </div>
-    <div class="case-row">
-      <div class="case rv">
-        <span class="sector">Госкорпорация · Закупки</span>
-        <h3>Аудит закупочного блока, стандарт компетенций и аттестация 1 200 специалистов по 44-ФЗ / 223-ФЗ</h3>
-        <div class="metric"><div class="num">−63%</div><div class="what">нарушений по итогам внешних проверок за следующий год</div></div>
-      </div>
-      <div class="case rv">
-        <span class="sector">Промышленный холдинг</span>
-        <h3>Единый стандарт инженерных компетенций для 14 предприятий и реестр аттестованных преподавателей</h3>
-        <div class="metric"><div class="num">×2,4</div><div class="what">скорость вывода новых инженеров на самостоятельную работу</div></div>
-      </div>
-      <div class="case rv">
-        <span class="sector">Банковская группа</span>
-        <h3>Комплаенс-обучение фронт-офиса с входным и выходным замером по 9 000 сотрудников</h3>
-        <div class="metric"><div class="num">+41</div><div class="what">пункта роста индекса комплаенс-готовности за цикл</div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PROCESS -->
-<section id="process">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <span class="eyebrow">Как мы работаем</span>
-      <h2>От первого разговора до отчёта совету директоров</h2>
-    </div>
-    <div class="proc">
-      <div class="p-step rv"><span class="bar"></span><span class="n">01</span><h4>Установочная сессия</h4><p>Формулируем задачу в терминах бизнес-результата, а не «провести обучение».</p></div>
-      <div class="p-step rv"><span class="bar"></span><span class="n">02</span><h4>Диагностика</h4><p>Аудит процессов и компетенций. На выходе — карта разрывов с оценкой рисков.</p></div>
-      <div class="p-step rv"><span class="bar"></span><span class="n">03</span><h4>Проектирование</h4><p>Стандарты, модель аттестации, отбор преподавателей и программ под разрывы.</p></div>
-      <div class="p-step rv"><span class="bar"></span><span class="n">04</span><h4>Реализация</h4><p>Аттестация и обучение с контрольными замерами и отчётностью кураторам.</p></div>
-      <div class="p-step rv"><span class="bar"></span><span class="n">05</span><h4>Подтверждение эффекта</h4><p>Итоговый замер, отчёт для первых лиц, план следующего цикла развития.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- EXPERTS -->
-<section class="bg-white" id="experts">
-  <div class="wrap">
-    <div class="sec-head rv">
-      <span class="eyebrow">Эксперты</span>
-      <h2>Люди, чьи подписи принимают регуляторы</h2>
-      <p>Ядро центра — практики с опытом в надзорных органах, госкорпорациях и международном аудите. Привлекаем отраслевых экспертов под каждую задачу.</p>
-    </div>
-    <div class="exp-grid">
-      <div class="expert rv">
-        <div class="ava">АВ</div>
-        <h4>Руководитель практики аудита</h4>
-        <div class="role">Аудит и комплаенс</div>
-        <p>17 лет в регуляторном комплаенсе. Руководил проверками федерального уровня, автор методик оценки соответствия для двух отраслей.</p>
-      </div>
-      <div class="expert rv">
-        <div class="ava">ЕК</div>
-        <h4>Руководитель методологии</h4>
-        <div class="role">Стандарты и аттестация</div>
-        <p>Разработала 12 действующих профстандартов. Эксперт национальной системы квалификаций, член отраслевых советов.</p>
-      </div>
-      <div class="expert rv">
-        <div class="ava">ДС</div>
-        <h4>Руководитель обучения</h4>
-        <div class="role">Программы и измерение результата</div>
-        <p>Построил корпоративные университеты в трёх холдингах. Специализация — доказательная оценка эффективности обучения.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- DARK BAND -->
-<section class="band">
-  <div class="wrap rv">
-    <blockquote>Дорогая экспертиза — это та, которая <em>окупается</em>. Остальная — просто дорогая.</blockquote>
-    <div class="who">Принцип работы центра МЕРА</div>
-    <a class="btn btn-primary btn-lg" href="#contact">Запросить экспертную сессию</a>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact">
-  <div class="wrap contact">
-    <div class="contact-info rv">
-      <span class="eyebrow">Начало работы</span>
-      <h2 class="mt">Обсудим вашу задачу на уровне первых лиц</h2>
-      <p class="desc">Первая встреча — экспертная сессия, а не презентация о нас. Вы уйдёте с предварительной картой рисков, даже если мы не начнём проект.</p>
-      <div class="c-line"><span class="k">Телефон</span><span class="v"><a href="tel:+74950000000">+7 (495) 000-00-00</a></span></div>
-      <div class="c-line"><span class="k">Почта</span><span class="v"><a href="mailto:office@mera-center.ru">office@mera-center.ru</a></span></div>
-      <div class="c-line"><span class="k">Адрес</span><span class="v">Москва, Пресненская наб., 12<br>башня «Федерация», 47 этаж</span></div>
-      <div class="c-line"><span class="k">Режим</span><span class="v">Пн–Пт, 9:00–19:00 (МСК)</span></div>
-    </div>
-    <form class="lead rv" id="leadForm" novalidate>
-      <h3>Запросить экспертную сессию</h3>
-      <p class="note">Ответим в течение одного рабочего дня. Конфиденциальность — по умолчанию, до подписания NDA.</p>
-      <div class="field"><label for="f-name">Имя и должность</label><input id="f-name" name="name" required placeholder="Иван Петров, директор по персоналу"/></div>
-      <div class="field"><label for="f-org">Организация</label><input id="f-org" name="org" required placeholder="Компания или ведомство"/></div>
-      <div class="field"><label for="f-contact">Телефон или e-mail</label><input id="f-contact" name="contact" required placeholder="+7 ___ ___-__-__"/></div>
-      <div class="field"><label for="f-topic">Что обсудим</label>
-        <select id="f-topic" name="topic">
-          <option>Аудит и комплаенс</option>
-          <option>Стандарты и аттестация</option>
-          <option>Отбор преподавателей и программ</option>
-          <option>Обучение с измерением результата</option>
-          <option>Полный контур под ключ</option>
-        </select>
-      </div>
-      <div class="field"><label for="f-msg">Кратко о задаче</label><textarea id="f-msg" name="message" placeholder="Двух-трёх предложений достаточно"></textarea></div>
-      <button class="btn btn-primary btn-lg" type="submit">Отправить запрос</button>
-      <div class="form-foot">Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных</div>
-      <div class="form-ok" id="formOk">Запрос принят. Мы свяжемся с вами в течение одного рабочего дня.</div>
-    </form>
-  </div>
-</section>
-
-<footer>
-  <div class="wrap">
-    <div class="foot">
-      <div class="brand">
-        <span class="glyph">М<b>Р</b></span>
+  <!-- HEADER -->
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="#top" aria-label="МЕРА — на главную">
+        <span class="emblem"><b>М</b></span>
         <span class="txt">
           <span class="name">МЕРА</span>
           <span class="role">Экспертно-аналитический центр</span>
         </span>
-      </div>
-      <nav>
+      </a>
+      <nav class="menu" id="menu">
         <a href="#services">Услуги</a>
         <a href="#method">Методология</a>
         <a href="#audience">Для кого</a>
         <a href="#cases">Результаты</a>
         <a href="#experts">Эксперты</a>
-        <a href="#contact">Контакты</a>
       </nav>
+      <a class="btn btn-primary btn-sm" href="#contact">Обсудить задачу</a>
+      <label class="burger" for="navtoggle" role="button" tabindex="0" aria-label="Открыть меню"><span></span></label>
     </div>
-    <div class="foot-bottom">
-      <span>© 2026 Экспертно-аналитический центр «МЕРА»</span>
-      <span>Конфиденциальность · NDA по умолчанию</span>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow rv">Экспертиза · Стандарты · Развитие людей</span>
+      <h1 class="rv">Мы измеряем то,<br>что другие <span class="accent">обещают</span></h1>
+      <p class="lead rv">
+        Экспертно-аналитический центр для крупных компаний и государственного сектора.
+        Проводим аудиты и комплаенс, разрабатываем стандарты и системы аттестации,
+        отбираем преподавателей и программы, обучаем — и подтверждаем результат цифрами.
+      </p>
+      <div class="hero-actions rv">
+        <a class="btn btn-primary btn-lg" href="#contact">Запросить экспертизу
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="btn btn-ghost btn-lg" href="#services">Контур услуг</a>
+      </div>
+      <div class="hero-stats rv">
+        <div class="hstat"><div class="num" data-count="17">17</div><div class="lbl">лет отраслевой экспертизы</div></div>
+        <div class="hstat"><div class="num" data-count="240" data-plus="1">240+</div><div class="lbl">проведённых аудитов</div></div>
+        <div class="hstat"><div class="num" data-count="38">38</div><div class="lbl">разработанных стандартов</div></div>
+        <div class="hstat"><div class="num" data-count="92" data-suffix="%">92%</div><div class="lbl">клиентов возвращаются</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CREDENTIALS -->
+  <div class="creds">
+    <div class="wrap">
+      <div class="cred rv">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 6v6c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V6l-8-4Z"/><path d="m9 12 2 2 4-4"/></svg></span>
+        <span class="t"><b>Аккредитация</b><span>в национальной системе квалификаций</span></span>
+      </div>
+      <div class="cred rv">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v14H4z"/><path d="M8 9h8M8 13h5"/><circle cx="17" cy="18" r="3"/></svg></span>
+        <span class="t"><b>Лицензия</b><span>на образовательную деятельность</span></span>
+      </div>
+      <div class="cred rv">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M5 7l7-5 7 5M5 7v10l7 5 7-5V7"/></svg></span>
+        <span class="t"><b>Реестр поставщиков</b><span>госсектора и госкорпораций</span></span>
+      </div>
+      <div class="cred rv">
+        <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18M5 11V7a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v4M7 11v8M17 11v8M3 19h18"/></svg></span>
+        <span class="t"><b>Защита данных</b><span>закрытые контуры, NDA по умолчанию</span></span>
+      </div>
     </div>
   </div>
-</footer>
+
+  <!-- SERVICES -->
+  <section id="services">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow">Контур услуг</span>
+        <h2>Замкнутый цикл — от диагностики до подтверждённого результата</h2>
+        <p>Мы не продаём разрозненные услуги. Каждый этап опирается на данные предыдущего:
+        аудит находит разрывы, стандарты их закрывают, аттестация фиксирует планку,
+        обучение доводит людей до неё — и всё это измеряется.</p>
+      </div>
+      <div class="contour">
+        <div class="stage rv">
+          <div class="top"><span class="num">01 — Диагностика</span><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span></div>
+          <h3>Аудиты и комплаенс</h3>
+          <p class="desc">Независимая оценка процессов, компетенций и соответствия регуляторным требованиям. Выявляем реальные, а не декларируемые разрывы.</p>
+          <ul>
+            <li>Комплаенс-аудит по отраслевым и федеральным требованиям</li>
+            <li>Аудит системы обучения и развития персонала</li>
+            <li>Оценка компетенций ключевых ролей</li>
+            <li>Карта рисков и план устранения разрывов</li>
+          </ul>
+        </div>
+        <div class="stage rv">
+          <div class="top"><span class="num">02 — Норматив</span><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg></span></div>
+          <h3>Стандарты и аттестация</h3>
+          <p class="desc">Переводим выводы аудита в работающие нормативы: профессиональные стандарты, модели компетенций и систему независимой аттестации.</p>
+          <ul>
+            <li>Разработка корпоративных и отраслевых стандартов</li>
+            <li>Модели компетенций и профили должностей</li>
+            <li>Система аттестации и сертификации специалистов</li>
+            <li>Регламенты, методики и оценочные средства</li>
+          </ul>
+        </div>
+        <div class="stage rv">
+          <div class="top"><span class="num">03 — Отбор</span><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M22 11h-6"/></svg></span></div>
+          <h3>Преподаватели и программы</h3>
+          <p class="desc">Отбираем и аттестуем преподавателей, проводим экспертизу программ — учат только те, кто подтвердил квалификацию по нашим стандартам.</p>
+          <ul>
+            <li>Отбор и аттестация преподавателей и тренеров</li>
+            <li>Экспертиза и сертификация учебных программ</li>
+            <li>Реестр аккредитованных провайдеров обучения</li>
+            <li>Методический контроль качества преподавания</li>
+          </ul>
+        </div>
+        <div class="stage rv">
+          <div class="top"><span class="num">04 — Результат</span><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></span></div>
+          <h3>Обучение с измерением эффекта</h3>
+          <p class="desc">Проводим обучение по аттестованным программам и доказываем эффект: замер «до и после», влияние на бизнес-показатели, отчёт для руководства.</p>
+          <ul>
+            <li>Корпоративные программы обучения и развития</li>
+            <li>Входной и выходной замер компетенций</li>
+            <li>Оценка влияния на операционные показатели</li>
+            <li>Аналитический отчёт и план следующего цикла</li>
+          </ul>
+        </div>
+        <div class="loop rv">
+          <span class="sym">∞</span>
+          <p><strong>Контур замыкается.</strong> Результаты обучения становятся входными данными следующего аудита. Система не деградирует со временем — она накапливает данные и поднимает планку с каждым циклом.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- METHOD -->
+  <section class="bg-white" id="method">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow">Методология</span>
+        <h2>Почему нашим цифрам верят советы директоров</h2>
+      </div>
+      <div class="method">
+        <p class="statement rv">
+          Любой вывод нашего центра можно проверить: за каждой оценкой стоит методика,
+          за методикой — данные, за данными — <em>воспроизводимый замер</em>.
+          Мы не выносим суждений, которые не можем защитить перед регулятором или акционером.
+        </p>
+        <div class="m-list">
+          <div class="m-item rv"><span class="no">01</span><div><h4>Независимость оценки</h4><p>Аудиторы не участвуют в обучении тех, кого оценивали. Конфликт интересов исключён регламентом.</p></div></div>
+          <div class="m-item rv"><span class="no">02</span><div><h4>Измеримость на каждом этапе</h4><p>Каждый этап завершается числом: индекс соответствия, балл аттестации, дельта компетенций.</p></div></div>
+          <div class="m-item rv"><span class="no">03</span><div><h4>Прослеживаемость до источника</h4><p>Любая оценка прослеживается до конкретного норматива, протокола или замера. Полный аудиторский след по запросу.</p></div></div>
+          <div class="m-item rv"><span class="no">04</span><div><h4>Конфиденциальность уровня госсектора</h4><p>Работаем с чувствительными данными по закрытым контурам, NDA и требованиям к защите информации.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUDIENCE -->
+  <section id="audience">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow">Для кого</span>
+        <h2>Два мира — одна планка требований</h2>
+      </div>
+      <div class="aud-grid">
+        <div class="aud corp rv">
+          <span class="tag">Крупный бизнес</span>
+          <h3>Корпорации и холдинги</h3>
+          <p class="desc">Когда цена ошибки персонала измеряется миллиардами, обучение перестаёт быть HR-функцией и становится управлением рисками.</p>
+          <ul>
+            <li>Единые стандарты компетенций для всех «дочек» и филиалов</li>
+            <li>Независимая аттестация ключевых и критических ролей</li>
+            <li>Защита инвестиций в обучение цифрами для совета директоров</li>
+            <li>Снижение регуляторных и операционных рисков</li>
+          </ul>
+        </div>
+        <div class="aud gov rv">
+          <span class="tag">Государственный сектор</span>
+          <h3>Ведомства и госкомпании</h3>
+          <p class="desc">Понимаем специфику: 44-ФЗ и 223-ФЗ, ведомственные регламенты, профстандарты, требования к подтверждению квалификации.</p>
+          <ul>
+            <li>Соответствие федеральным и ведомственным требованиям</li>
+            <li>Методики, выдерживающие проверку контрольных органов</li>
+            <li>Аттестация по профстандартам с документальным следом</li>
+            <li>Отчётность в форматах, принятых в госуправлении</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CASES -->
+  <section class="bg-white" id="cases">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow">Результаты</span>
+        <h2>Эффект, который видно в отчётности, а не в отзывах</h2>
+        <p>Имена клиентов раскрываем только по согласованию — таковы условия наших NDA. Цифры ниже подтверждены актами сдачи-приёмки.</p>
+      </div>
+      <div class="case-row">
+        <div class="case rv">
+          <span class="sector">Госкорпорация · Закупки</span>
+          <h3>Аудит закупочного блока, стандарт компетенций и аттестация 1 200 специалистов по 44-ФЗ / 223-ФЗ</h3>
+          <div class="metric"><div class="num">−63%</div><div class="what">нарушений по итогам внешних проверок за следующий год</div></div>
+        </div>
+        <div class="case rv">
+          <span class="sector">Промышленный холдинг</span>
+          <h3>Единый стандарт инженерных компетенций для 14 предприятий и реестр аттестованных преподавателей</h3>
+          <div class="metric"><div class="num">×2,4</div><div class="what">скорость вывода новых инженеров на самостоятельную работу</div></div>
+        </div>
+        <div class="case rv">
+          <span class="sector">Банковская группа</span>
+          <h3>Комплаенс-обучение фронт-офиса с входным и выходным замером по 9 000 сотрудников</h3>
+          <div class="metric"><div class="num">+41</div><div class="what">пункта роста индекса комплаенс-готовности за цикл</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="process">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow">Как мы работаем</span>
+        <h2>От первого разговора до отчёта совету директоров</h2>
+      </div>
+      <div class="proc">
+        <div class="p-step rv"><span class="bar"></span><span class="n">01</span><h4>Установочная сессия</h4><p>Формулируем задачу в терминах бизнес-результата, а не «провести обучение».</p></div>
+        <div class="p-step rv"><span class="bar"></span><span class="n">02</span><h4>Диагностика</h4><p>Аудит процессов и компетенций. На выходе — карта разрывов с оценкой рисков.</p></div>
+        <div class="p-step rv"><span class="bar"></span><span class="n">03</span><h4>Проектирование</h4><p>Стандарты, модель аттестации, отбор преподавателей и программ под разрывы.</p></div>
+        <div class="p-step rv"><span class="bar"></span><span class="n">04</span><h4>Реализация</h4><p>Аттестация и обучение с контрольными замерами и отчётностью кураторам.</p></div>
+        <div class="p-step rv"><span class="bar"></span><span class="n">05</span><h4>Подтверждение эффекта</h4><p>Итоговый замер, отчёт для первых лиц, план следующего цикла развития.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERTS -->
+  <section class="bg-white" id="experts">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <span class="eyebrow">Эксперты</span>
+        <h2>Люди, чьи подписи принимают регуляторы</h2>
+        <p>Ядро центра — практики с опытом в надзорных органах, госкорпорациях и международном аудите. Привлекаем отраслевых экспертов под каждую задачу.</p>
+      </div>
+      <div class="exp-grid">
+        <div class="expert rv"><div class="ava">АВ</div><h4>Руководитель практики аудита</h4><div class="role">Аудит и комплаенс</div><p>17 лет в регуляторном комплаенсе. Руководил проверками федерального уровня, автор методик оценки соответствия для двух отраслей.</p></div>
+        <div class="expert rv"><div class="ava">ЕК</div><h4>Руководитель методологии</h4><div class="role">Стандарты и аттестация</div><p>Разработала 12 действующих профстандартов. Эксперт национальной системы квалификаций, член отраслевых советов.</p></div>
+        <div class="expert rv"><div class="ava">ДС</div><h4>Руководитель обучения</h4><div class="role">Программы и измерение результата</div><p>Построил корпоративные университеты в трёх холдингах. Специализация — доказательная оценка эффективности обучения.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NAVY BAND -->
+  <section class="band">
+    <div class="wrap rv">
+      <blockquote>Дорогая экспертиза — это та, которая <em>окупается</em>. Остальная — просто дорогая.</blockquote>
+      <div class="who">Принцип работы центра МЕРА</div>
+      <a class="btn btn-primary btn-lg" href="#contact">Запросить экспертную сессию</a>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="wrap contact">
+      <div class="contact-info rv">
+        <span class="eyebrow">Начало работы</span>
+        <h2>Обсудим вашу задачу на уровне первых лиц</h2>
+        <p class="desc">Первая встреча — экспертная сессия, а не презентация о нас. Вы уйдёте с предварительной картой рисков, даже если мы не начнём проект.</p>
+        <div class="c-line"><span class="k">Телефон</span><span class="v"><a href="tel:+74950000000">+7 (495) 000-00-00</a></span></div>
+        <div class="c-line"><span class="k">Почта</span><span class="v"><a href="mailto:office@mera-center.ru">office@mera-center.ru</a></span></div>
+        <div class="c-line"><span class="k">Адрес</span><span class="v">Москва, Пресненская наб., 12<br>башня «Федерация», 47 этаж</span></div>
+        <div class="c-line"><span class="k">Режим</span><span class="v">Пн–Пт, 9:00–19:00 (МСК)</span></div>
+      </div>
+      <form class="lead rv" id="leadForm" novalidate>
+        <h3>Запросить экспертную сессию</h3>
+        <p class="note">Ответим в течение одного рабочего дня. Конфиденциальность — по умолчанию, до подписания NDA.</p>
+        <div class="field"><label for="f-name">Имя и должность</label><input id="f-name" name="name" required placeholder="Иван Петров, директор по персоналу"/></div>
+        <div class="field"><label for="f-org">Организация</label><input id="f-org" name="org" required placeholder="Компания или ведомство"/></div>
+        <div class="field"><label for="f-contact">Телефон или e-mail</label><input id="f-contact" name="contact" required placeholder="+7 ___ ___-__-__"/></div>
+        <div class="field"><label for="f-topic">Что обсудим</label>
+          <select id="f-topic" name="topic">
+            <option>Аудит и комплаенс</option>
+            <option>Стандарты и аттестация</option>
+            <option>Отбор преподавателей и программ</option>
+            <option>Обучение с измерением результата</option>
+            <option>Полный контур под ключ</option>
+          </select>
+        </div>
+        <div class="field"><label for="f-msg">Кратко о задаче</label><textarea id="f-msg" name="message" placeholder="Двух-трёх предложений достаточно"></textarea></div>
+        <button class="btn btn-primary btn-lg" type="submit">Отправить запрос</button>
+        <div class="form-foot">Нажимая кнопку, вы соглашаетесь с политикой обработки персональных данных</div>
+        <div class="form-ok" id="formOk">Запрос принят. Мы свяжемся с вами в течение одного рабочего дня.</div>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <div class="foot">
+        <div>
+          <div class="brand">
+            <span class="emblem"><b>М</b></span>
+            <span class="txt"><span class="name">МЕРА</span><span class="role">Экспертно-аналитический центр</span></span>
+          </div>
+          <p class="tagline">Аудит, стандарты, аттестация и обучение с измеримым результатом — для крупных компаний и государственного сектора.</p>
+        </div>
+        <div>
+          <h5>Направления</h5>
+          <ul>
+            <li><a href="#services">Аудиты и комплаенс</a></li>
+            <li><a href="#services">Стандарты и аттестация</a></li>
+            <li><a href="#services">Преподаватели и программы</a></li>
+            <li><a href="#services">Обучение с измерением</a></li>
+          </ul>
+        </div>
+        <div>
+          <h5>Центр</h5>
+          <ul>
+            <li><a href="#method">Методология</a></li>
+            <li><a href="#cases">Результаты</a></li>
+            <li><a href="#experts">Эксперты</a></li>
+            <li><a href="#contact">Контакты</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="foot-bottom">
+        <span>© 2026 Экспертно-аналитический центр «МЕРА». Все права защищены.</span>
+        <span>Политика конфиденциальности · NDA по умолчанию</span>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /.site -->
 
 <script>
 (function(){
-  // header shadow on scroll
-  var hdr=document.getElementById('hdr');
-  var onScroll=function(){hdr.classList.toggle('scrolled',window.scrollY>10);};
-  onScroll();window.addEventListener('scroll',onScroll,{passive:true});
+  var menu=document.getElementById('menu'),navtoggle=document.getElementById('navtoggle');
+  // close mobile menu when a link is tapped (CSS handles open/close without JS)
+  if(menu&&navtoggle){menu.addEventListener('click',function(e){if(e.target.tagName==='A')navtoggle.checked=false;});}
 
-  // mobile menu
-  var burger=document.getElementById('burger'),menu=document.getElementById('menu');
-  var setMenu=function(open){menu.classList.toggle('open',open);burger.setAttribute('aria-expanded',open?'true':'false');};
-  burger.addEventListener('click',function(){setMenu(!menu.classList.contains('open'));});
-  menu.addEventListener('click',function(e){if(e.target.tagName==='A')setMenu(false);});
-
-  // reveal on scroll (enhancement only — content is visible without JS)
+  // reveal on scroll — enhancement only (content visible without JS)
   if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(es){
-      es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});
-    },{threshold:.12,rootMargin:'0px 0px -40px 0px'});
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12,rootMargin:'0px 0px -40px 0px'});
     document.querySelectorAll('.rv').forEach(function(el){io.observe(el);});
-  }else{
-    document.querySelectorAll('.rv').forEach(function(el){el.classList.add('in');});
-  }
-
-  // animated counters
-  if('IntersectionObserver' in window){
-    var cio=new IntersectionObserver(function(es){
-      es.forEach(function(e){
-        if(!e.isIntersecting)return;
-        var el=e.target,target=+el.dataset.count,suffix=el.dataset.suffix||'',plus=el.dataset.plus?'+':'';
-        var dur=1300,t0=performance.now();
-        function tick(t){
-          var p=Math.min((t-t0)/dur,1),eased=1-Math.pow(1-p,3);
-          el.textContent=Math.round(target*eased)+plus+suffix;
-          if(p<1)requestAnimationFrame(tick);
-        }
-        requestAnimationFrame(tick);
-        cio.unobserve(el);
-      });
-    },{threshold:.6});
+    var cio=new IntersectionObserver(function(es){es.forEach(function(e){
+      if(!e.isIntersecting)return;var el=e.target,target=+el.dataset.count,suffix=el.dataset.suffix||'',plus=el.dataset.plus?'+':'',dur=1300,t0=performance.now();
+      function tick(t){var p=Math.min((t-t0)/dur,1),k=1-Math.pow(1-p,3);el.textContent=Math.round(target*k)+plus+suffix;if(p<1)requestAnimationFrame(tick);}
+      requestAnimationFrame(tick);cio.unobserve(el);});},{threshold:.6});
     document.querySelectorAll('[data-count]').forEach(function(el){cio.observe(el);});
-  }
+  }else{document.querySelectorAll('.rv').forEach(function(el){el.classList.add('in');});}
 
   // lead form (demo)
-  document.getElementById('leadForm').addEventListener('submit',function(e){
-    e.preventDefault();
-    var inv=this.querySelector('input[required]:invalid,select:invalid');
-    if(inv){inv.focus();return;}
-    document.getElementById('formOk').style.display='block';
-    this.querySelector('button[type=submit]').disabled=true;
-  });
+  var form=document.getElementById('leadForm');
+  if(form){form.addEventListener('submit',function(e){e.preventDefault();var inv=this.querySelector('input[required]:invalid');if(inv){inv.focus();return;}document.getElementById('formOk').style.display='block';this.querySelector('button[type=submit]').disabled=true;});}
 })();
 </script>
 </body>
