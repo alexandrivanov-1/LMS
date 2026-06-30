@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLM Council — PNG → SVG пайплайн</title>
+<style>
+  :root{
+    --bg:#fafafa; --card:#fff; --ink:#1a1a1a; --muted:#666; --line:#e6e6e6;
+    --accent:#3b5bdb; --green:#2b8a3e; --red:#c92a2a; --amber:#b8860b;
+    --c1:#c92a2a; --c2:#3b5bdb; --c3:#7048e8; --c4:#0c8599; --c5:#2b8a3e;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:860px;margin:0 auto;padding:48px 24px 80px}
+  header.top{border-bottom:2px solid var(--ink);padding-bottom:20px;margin-bottom:32px}
+  .kicker{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  h1{font-size:30px;margin:8px 0 6px;line-height:1.2}
+  .sub{color:var(--muted);font-size:15px}
+  .question{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);
+    border-radius:8px;padding:18px 20px;margin:24px 0;font-size:15px}
+  .question b{display:block;margin-bottom:6px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+  h2{font-size:13px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);
+    margin:40px 0 14px;border-bottom:1px solid var(--line);padding-bottom:8px}
+  .verdict{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:28px;margin-bottom:8px;
+    box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  .verdict h3{font-size:17px;margin:24px 0 8px;display:flex;align-items:center;gap:8px}
+  .verdict h3:first-child{margin-top:0}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
+  .d-green{background:var(--green)} .d-red{background:var(--red)} .d-amber{background:var(--amber)} .d-accent{background:var(--accent)}
+  .verdict p{margin:6px 0} .verdict ul{margin:6px 0 6px 0;padding-left:20px} .verdict li{margin:5px 0}
+  .reco{background:#f3f6ff;border:1px solid #cfd9ff;border-radius:10px;padding:20px;margin-top:8px}
+  .first{background:#f0fbf2;border:1px solid #bfe6c8;border-radius:10px;padding:18px 20px;margin-top:14px}
+  .first .lbl{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--green);font-weight:700;margin-bottom:6px}
+  /* alignment grid */
+  .matrix{display:grid;grid-template-columns:170px 1fr;gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+  .matrix .row{display:contents}
+  .matrix .name{padding:12px 14px;border-bottom:1px solid var(--line);font-weight:600;font-size:14px;display:flex;align-items:center;gap:8px}
+  .matrix .stance{padding:12px 14px;border-bottom:1px solid var(--line);font-size:14px;color:#333}
+  .matrix .row:last-child .name,.matrix .row:last-child .stance{border-bottom:none}
+  .chip{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:6px;vertical-align:middle}
+  .chip.win{background:#e7f0ff;color:var(--accent)} .chip.blind{background:#fff0f0;color:var(--red)}
+  .spectrum{margin:18px 0 6px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+  .spectrum .bar{position:relative;height:6px;background:linear-gradient(90deg,#2b8a3e,#b8860b,#c92a2a);border-radius:3px;margin:30px 0 10px}
+  .spectrum .ends{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:4px}
+  .pin{position:absolute;top:-26px;transform:translateX(-50%);font-size:11px;text-align:center;width:120px}
+  .pin .p-dot{width:11px;height:11px;border-radius:50%;margin:4px auto 0;border:2px solid #fff;box-shadow:0 0 0 1px rgba(0,0,0,.15)}
+  details{background:var(--card);border:1px solid var(--line);border-radius:10px;margin:10px 0;overflow:hidden}
+  details summary{cursor:pointer;padding:14px 18px;font-weight:600;font-size:15px;list-style:none;display:flex;align-items:center;gap:10px}
+  details summary::-webkit-details-marker{display:none}
+  details summary .tag{font-size:11px;font-weight:600;color:#fff;padding:2px 9px;border-radius:5px}
+  details[open] summary{border-bottom:1px solid var(--line)}
+  details .body{padding:16px 18px;font-size:14.5px;color:#2a2a2a}
+  details .body code{background:#f3f3f3;padding:1px 5px;border-radius:4px;font-size:13px}
+  details .body pre{background:#1a1a1a;color:#eee;padding:14px;border-radius:8px;overflow-x:auto;font-size:12.5px;line-height:1.5}
+  code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+  .t1{background:var(--c1)} .t2{background:var(--c2)} .t3{background:var(--c3)} .t4{background:var(--c4)} .t5{background:var(--c5)}
+  .stages{counter-reset:s;margin:8px 0}
+  .stage{display:flex;gap:14px;padding:12px 0;border-bottom:1px dashed var(--line)}
+  .stage:last-child{border-bottom:none}
+  .stage .n{counter-increment:s;flex:none;width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;
+    font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}
+  .stage .n::before{content:counter(s)}
+  .stage .txt{font-size:14.5px}
+  .stage .txt b{display:block;margin-bottom:2px}
+  footer{margin-top:48px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:13px;text-align:center}
+  .warn{background:#fff8e6;border:1px solid #f0d98a;border-radius:8px;padding:12px 16px;font-size:14px;margin:14px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="kicker">LLM Council · Вердикт</div>
+    <h1>Локальный пайплайн PNG → SVG: переработка концепта</h1>
+    <div class="sub">5 советников · анонимное перекрёстное ревью · синтез председателя — 2026-06-30</div>
+  </header>
+
+  <div class="question">
+    <b>Вопрос совету</b>
+    Переработать концепт «автоматического перевода PNG → SVG локальными инструментами» на MacBook Pro
+    (заявлено: M5 Max, 128 ГБ RAM). Исходный план: LLM-оркестратор (Qwen Vision через Ollama) классифицирует
+    картинку и выдаёт JSON-параметры → препроцессинг (OpenCV / ImageMagick / Real-ESRGAN) → трассировка VTracer
+    → SVGO → валидация с авто-повтором. Нужен реалистичный и надёжный вариант.
+  </div>
+
+  <h2>Вердикт председателя</h2>
+  <div class="verdict">
+
+    <h3><span class="dot d-green"></span>Где совет сходится</h3>
+    <ul>
+      <li><b>LLM-«мозг» не нужен.</b> Все пятеро независимо: классификация «логотип / фото / эскиз» — это
+        детерминированная эвристика на 5–6 признаках OpenCV (число уникальных цветов, доля краёв через Canny,
+        энтропия гистограммы, доля прозрачности), а не Vision-модель. LLM вносит латентность,
+        нагрев и галлюцинации туда, где нужна воспроизводимость.</li>
+      <li><b>Фото не трассируются.</b> SVG — формат геометрии (контуры, Безье). Фотографию трассировка
+        превращает в тысячи рваных полигонов — файл тяжелее исходного PNG. Честный ответ для фото:
+        отказать или встроить растр через <code>&lt;image&gt;</code> base64.</li>
+      <li><b>Лишний overhead — выкинуть.</b> Real-ESRGAN (плодит артефакты перед трассировкой), ComfyUI
+        (это GUI для диффузии, не пайплайн-движок), LangGraph, «397B-модель». Ядро = VTracer + SVGO + bash/Python.</li>
+      <li><b>Ядро инструментов верное.</b> VTracer и SVGO — правильный выбор; претензии только к обвязке.</li>
+    </ul>
+
+    <h3><span class="dot d-red"></span>Где совет расходится</h3>
+    <ul>
+      <li><b>Масштаб vs фундамент.</b> Экспансионист хочет сразу батч-фабрику, MCP-сервер и
+        само-тюнящийся пайплайн с обучением на SSIM. Остальные четверо: это автоматизация мусора
+        поверх недоказанной базы. <i>Разрешение:</i> идея ценная, но строго после того, как ядро работает
+        и появился честный триаж.</li>
+      <li><b>Роль LLM — ноль или почти ноль.</b> Контрарианец/Первопринципник: убрать полностью.
+        Исполнитель: допустимо позже как мелкий классификатор (llava 7b) для выбора пресета — но и тогда
+        3 руками подобранных пресета обычно бьют его.</li>
+    </ul>
+
+    <h3><span class="dot d-amber"></span>Слепые пятна, пойманные на ревью</h3>
+    <ul>
+      <li><b>Нет критерия «хороший SVG».</b> Без success-метрики (порог SSIM + бюджет path + размер)
+        цикл авто-повтора не имеет условия остановки — у исходного концепта это потенциально бесконечный цикл.</li>
+      <li><b>Не задан вопрос «зачем вообще».</b> Для логотипов и иконок исходник чаще уже существует
+        в векторе (Figma / AI / PDF / шрифт). Реверс из растра решает проблему, которой во многих случаях
+        быть не должно. Сначала спросить источник.</li>
+      <li><b>SSIM — ловушка как сигнал обучения.</b> Он награждает буквальное копирование пикселей,
+        то есть закрепляет фото-трассировку — ровно то, что нельзя делать.</li>
+      <li><b>Не учтены текст и градиенты</b> как отдельные классы; не учтены объём/частота, приватность входа
+        и человек-в-петле на масштабе.</li>
+    </ul>
+
+    <div class="reco">
+      <h3 style="margin-top:0"><span class="dot d-accent"></span>Рекомендация</h3>
+      <p><b>Соберите детерминированный конвейер из 6 этапов, без LLM в ядре. «Мозг» = метрики, а не нейросеть.</b>
+      LLM (мелкий vision-классификатор) — опциональный модуль третьей недели, и только если докажет,
+      что бьёт пресеты на ваших данных.</p>
+      <div class="stages">
+        <div class="stage"><div class="n"></div><div class="txt"><b>1 · Триаж (метрики OpenCV)</b>
+          Считаем n_colors, edge-ratio (Canny), энтропию, долю alpha. Ветка <i>vector-friendly</i> / <i>photo</i>.</div></div>
+        <div class="stage"><div class="n"></div><div class="txt"><b>2 · Фото → честный fallback</b>
+          reject или обёртка <code>&lt;image&gt;</code> base64. Никакой трассировки и никакого Real-ESRGAN.</div></div>
+        <div class="stage"><div class="n"></div><div class="txt"><b>3 · Подготовка (только нужное)</b>
+          <code>magick -fuzz 10% -trim +repage</code> + квантование цветов по n_colors. Денойз/апскейл — точечно, не превентивно.</div></div>
+        <div class="stage"><div class="n"></div><div class="txt"><b>4 · Трассировка VTracer</b>
+          Пресет по классу: <code>--mode spline</code> для лого/иллюстраций, <code>--mode polygon</code> для иконок/пиксель-арта.
+          Главные ручки: <code>--filter_speckle</code> (2–10), <code>--color_precision</code> (4–8), <code>--corner_threshold</code>.</div></div>
+        <div class="stage"><div class="n"></div><div class="txt"><b>5 · SVGO</b>
+          <code>svgo --multipass</code> — обязательный финиш.</div></div>
+        <div class="stage"><div class="n"></div><div class="txt"><b>6 · Валидация с условием остановки</b>
+          Проверяем SSIM(PNG↔рендер SVG) ≥ порога, число <code>&lt;path&gt;</code> ≤ бюджета, размер ≤ лимита.
+          Превышение path при «vector-friendly» = сигнал «это было фото» → в ветку 2, а не бесконечный авто-сглаживатель.
+          Жёсткий лимит итераций (например, 3) + fallback.</div></div>
+      </div>
+      <div class="warn">⚠️ Проверка фактуры: <b>«Qwen 3.5 397B», «Qwen 3.6 35B-A3B» и «M5 Max» на дату задачи не существуют.</b>
+      Концепт проектировался по слухам о железе/моделях. Реальный план не должен от них зависеть — он и не зависит.</div>
+    </div>
+
+    <div class="first">
+      <div class="lbl">Первый шаг — в понедельник утром</div>
+      <p style="margin:0"><code>brew install vtracer imagemagick &amp;&amp; npm i -g svgo</code>, киньте
+      20 своих реальных PNG в <code>in/</code> и прогоните голый цикл
+      <code>vtracer --mode spline --color_precision 6 --filter_speckle 4 → svgo --multipass</code>.
+      Посмотрите глазами на 5 худших результатов. Это покажет, какая доля входа вообще векторизуема,
+      и даст эталон, с которым потом сравнивать любой «умный» слой. Всё остальное — после.</p>
+    </div>
+  </div>
+
+  <h2>Кто где встал</h2>
+  <div class="spectrum">
+    <div style="font-size:13px;color:var(--muted);margin-bottom:4px">Ось: сколько «ума»/инфраструктуры закладывать в пайплайн</div>
+    <div class="bar">
+      <div class="pin" style="left:8%">Исполнитель<div class="p-dot t5"></div></div>
+      <div class="pin" style="left:24%">Контрарианец<div class="p-dot t1"></div></div>
+      <div class="pin" style="left:40%">Первопринципник<div class="p-dot t4"></div></div>
+      <div class="pin" style="left:60%">Чужак<div class="p-dot t3"></div></div>
+      <div class="pin" style="left:92%">Экспансионист<div class="p-dot t2"></div></div>
+    </div>
+    <div class="ends"><span>Голый детерминизм, ноль LLM</span><span>Само-тюнящаяся ИИ-фабрика</span></div>
+  </div>
+
+  <div class="matrix" style="margin-top:14px">
+    <div class="row"><div class="name"><span class="dot d-red"></span>Контрарианец</div>
+      <div class="stance">LLM — паразит. Модели/железо вымышлены. Бесконечный цикл, артефакты ESRGAN. Выкинуть Ollama.</div></div>
+    <div class="row"><div class="name"><span class="dot d-accent"></span>Первопринципник <span class="chip win">сильнейший · 4/5</span></div>
+      <div class="stance">Фото не трассируются. Качество = метрики, не нейросеть. Триаж → reject/<code>&lt;image&gt;</code> → VTracer → SVGO.</div></div>
+    <div class="row"><div class="name"><span class="dot" style="background:var(--c3)"></span>Чужак</div>
+      <div class="stance">Не всё стоит конвертировать. «Мозг» = переусложнение. Нужен фильтр «годится/нет», превью до/после, 3 ползунка.</div></div>
+    <div class="row"><div class="name"><span class="dot" style="background:var(--c5)"></span>Исполнитель</div>
+      <div class="stance">MVP за вечер без LLM. Реальные ручки VTracer. LLM — максимум классификатор пресета позже.</div></div>
+    <div class="row"><div class="name"><span class="dot d-accent" style="background:var(--c2)"></span>Экспансионист <span class="chip blind">слепое пятно · 5/5</span></div>
+      <div class="stance">Батч-фабрика, MCP-сервер, обучение на SSIM. Ревью: строит на недоказанной базе, масштабирует мусор.</div></div>
+  </div>
+
+  <h2>Полные ответы советников</h2>
+
+  <details><summary><span class="tag t1">Контрарианец</span> LLM здесь — паразит, а не мозг</summary>
+    <div class="body">
+      <p>Названные модели — фантомы. «Qwen 3.5 397B» и «Qwen 3.6 35B-A3B» на дату задачи не существуют; есть Qwen2.5-VL и Qwen3, но не в этих версиях/размерах. «M5 Max» тоже выдуман. Концепт построен на железе и весах, которых нет — проектирование по слухам.</p>
+      <p>Главный изъян — LLM здесь паразит. Классификация «логотип/фото/эскиз» решается гистограммой цветов и числом уникальных оттенков за 5 строк OpenCV, детерминированно. Vision-LLM на это — стрельба из гаубицы по воробью: недетерминированный, галлюцинирует «JSON-конфигом» с параметрами, которых не понимает физически.</p>
+      <p>Скрытые точки отказа: Real-ESRGAN перед трассировкой плодит артефакты-«мыло», VTracer обводит каждый, число path взрывается; цикл «повышаем сглаживание и повторяем» не имеет гарантии сходимости (логотип с градиентом → бесконечный цикл); фото в SVG — антипаттерн (200k path, файл тяжелее PNG); ComfyUI — нодовый GUI для диффузии, не пайплайн-движок.</p>
+      <p>Честный вопрос: что именно LLM делает, чего не делают 30 строк Python с детерминированными правилами? Если ответа нет — выкиньте Ollama, оставьте классификатор-эвристику + VTracer + SVGO.</p>
+    </div>
+  </details>
+
+  <details><summary><span class="tag t4">Первопринципник</span> Правильный вопрос — «что вообще стоит трассировать»</summary>
+    <div class="body">
+      <p>Трассировка фотографий бессмысленна — это главная ошибка концепта. SVG — формат для геометрии: контуры, заливки, кривые Безье. Фотография — поле непрерывных тонов без контуров. «Фото → SVG» даёт либо тысячи рваных полигонов (файл больше PNG), либо постеризованную кашу. Честный ответ для фото: <code>&lt;image&gt;</code> base64 либо отказ. Трассировка осмысленна только для геометричного: логотипы, иконки, штриховые эскизы, текст.</p>
+      <p>LLM-оркестратор — решение в поисках задачи. Качество SVG определяют три вещи: число цветов, контурность краёв, порог квантования. Всё меряется без нейросети: число уникальных цветов, доля краёв (Canny), энтропия гистограммы, доля прозрачности. Классификация — пороговый классификатор на 5–6 признаках.</p>
+      <p>Архитектура: 1) Триаж метриками OpenCV; 2) Фото → reject или <code>&lt;image&gt;</code>; 3) Vector-friendly → квантование → VTracer; 4) SVGO + валидация; 5) цикл оставить, но «слишком много путей» = сигнал «это было фото», а не «сгладь сильнее».</p>
+    </div>
+  </details>
+
+  <details><summary><span class="tag t3">Чужак</span> Начните с фильтра «годится / не годится», а не с «мозга»</summary>
+    <div class="body">
+      <p>Перевод PNG → SVG имеет смысл не для всех картинок, и это не проговорено. SVG выигрывает на простой графике (логотипы, иконки, схемы, шрифты): масштабирование, крошечный вес, редактируемость. На фото/градиентах — раздувается, тяжелее PNG, выглядит как пятна. Уже на входе нужен честный ответ: «эту оставьте PNG».</p>
+      <p>«Нейросеть-мозг» — переусложнение. Со стороны слышу: «не смогли подобрать настройки, поэтому повесили туда ИИ». У трассировки немного значимых ручек: цвета, сглаживание, удаление мусора — это пара эвристик. Локальная нейросеть тянет вес, время запуска, нагрев, непредсказуемость.</p>
+      <p>Что оттолкнуло бы: непонятно, что нажать и что получу (нужен превью «до/после» и размер); «проверка с повтором, если плохо» — кто судья «плохо»?; апскейл перед трассировкой = накопление ошибок. Начните с честного фильтра и трёх понятных ползунков.</p>
+    </div>
+  </details>
+
+  <details><summary><span class="tag t5">Исполнитель</span> Рабочий конвейер за один вечер, без LLM</summary>
+    <div class="body">
+      <pre>brew install vtracer imagemagick
+npm i -g svgo
+
+for f in in/*.png; do
+  n=$(basename "$f" .png)
+  vtracer --input "$f" --output "out/$n.svg" \
+    --mode spline --color_precision 6 \
+    --filter_speckle 4 --corner_threshold 60
+  svgo --multipass "out/$n.svg"
+done</pre>
+      <p>Real-ESRGAN, ComfyUI, LangGraph, «Qwen-397B» — выкинь. Это даёт результат на 80% картинок.</p>
+      <p>Ручки VTracer: <code>--filter_speckle</code> (2–10, главный рычаг против тысяч path), <code>--color_precision</code> (4–8), <code>--mode spline</code> для лого / <code>polygon</code> для пиксель-арта; <code>--gradient_step</code>, <code>--corner_threshold</code> — потом.</p>
+      <p>Препроцессинг — только если грязно: <code>magick in.png -fuzz 10% -trim +repage</code>. Upscale/денойз — точечно. LLM появляется позже и не оркестратором: максимум мелкий классификатор (llava 7b) для пресета — 30 строк, на третьей неделе. 3 руками подобранных пресета бьют JSON от LLM. Валидация: размер + <code>grep -c '&lt;path'</code>, превысил порог — прогон с <code>filter_speckle +2</code>.</p>
+    </div>
+  </details>
+
+  <details><summary><span class="tag t2">Экспансионист</span> Батч — это сам продукт; стройте накапливающую систему</summary>
+    <div class="body">
+      <p>Батч — не «фича», это сам продукт. Если M5 Max и 128 ГБ простаивают, обрабатывать одну PNG за раз — преступление. Очередь на тысячи ассетов превращает «конвертер» в фабрику дизайн-ассетов.</p>
+      <p>Самое недооценённое — петля валидации. Есть числовая метрика качества (SSIM/perceptual diff между PNG и рендером SVG) — готовый сигнал для обучения. Логируй: класс → параметры VTracer → score. Через тысячу прогонов — датасет «параметр→качество», оркестратор начинает предсказывать. Само-тюнящийся пайплайн.</p>
+      <p>Смежное: дедуп иконок, нормализация палитры до токенов дизайн-системы, генерация вариантов (24/48px, тёмная тема), осмысленные имена. Это уже иконпак-генератор. И вектор наружу — обернуть в MCP-сервер: любой агент дёргает «векторизуй» как инструмент, локально и приватно.</p>
+      <p><i>Замечание председателя: ревью единогласно отметило это как слепое пятно — масштабировать и обучать имеет смысл только после рабочего ядра и честного триажа, иначе SSIM-петля закрепит фото-трассировку.</i></p>
+    </div>
+  </details>
+
+  <details><summary>🔍 Перекрёстное ревью — ключевые сходства</summary>
+    <div class="body">
+      <ul>
+        <li><b>Сильнейший — Первопринципник (4/5 голосов):</b> единственный соединил верную критику с работающей архитектурой и измеримым инвариантом «много путей = это фото».</li>
+        <li><b>1 голос — Контрарианец:</b> единственный проверил фактуру (вымышленные модели/железо) и поймал бесконечный цикл.</li>
+        <li><b>Слепое пятно — Экспансионист (5/5):</b> само-тюнящаяся фабрика на недоказанном фундаменте; SSIM как сигнал обучения награждает буквальную фото-трассировку.</li>
+        <li><b>Что упустили все:</b> определение «хорошего SVG» (success-метрика + бюджет приёмки); вопрос «зачем вообще» (для лого исходник часто уже в векторе — Figma/AI/PDF/шрифт); текст и градиенты как классы; объём/приватность/человек-в-петле.</li>
+      </ul>
+    </div>
+  </details>
+
+  <footer>
+    LLM Council · 5 советников + анонимное ревью + синтез · 2026-06-30 ·
+    counciled: переработка локального пайплайна PNG → SVG.<br>
+    Полный транскрипт: <code>council-transcript-20260630-003448.md</code>
+  </footer>
+
+</div>
+</body>
+</html>
